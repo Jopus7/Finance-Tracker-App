@@ -1,4 +1,4 @@
-#Finance Tracker App
+# Finance Tracker App
 
 Finance Tracker is a web application designed to help users control their accounts and track their expenses. The application consists of a FastAPI backend and a React frontend with Material UI.
 
