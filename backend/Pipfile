@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 fastapi = "*"
 uvicorn = "*"
+sqlalchemy = "*"
+alembic = "*"
+asyncpg = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

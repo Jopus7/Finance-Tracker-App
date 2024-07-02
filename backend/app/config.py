@@ -11,3 +11,7 @@ def _environment_variable(variable_name: str, default: Optional[str] = None) -> 
         raise Exception(f"Variable {variable_name} not found")
     
     return variable_value
+
+
+def database_url() -> str:
+    return _environment_variable("DATABASE_URL")
