@@ -1,0 +1,21 @@
+version: "3"
+
+tasks:
+  default:
+    desc: "Run all the dev tools at once"
+    cmds:
+      - task: format
+      - task: lint
+      - task: typing
+  format:
+    desc: Run formatter
+    cmds:
+      - ruff format
+  lint:
+    desc: Run linter
+    cmds:
+      - ruff check --fix
+  typing:
+    desc: Run mypy for type hints check
+    cmds:
+      - mypy app --strict
