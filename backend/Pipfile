@@ -10,6 +10,8 @@ sqlalchemy = "*"
 alembic = "*"
 asyncpg = "*"
 psycopg2-binary = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
+pg8000 = "*"
 
 [dev-packages]
 mypy = "*"
