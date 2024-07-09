@@ -4,7 +4,7 @@ tasks:
   db:console:
     desc: Open database console
     cmds:
-      - docker compose exec postgres psql zeus postgres
+      - docker compose exec postgres psql finance_tracker postgres
 
   console:
     desc: Open developement console
