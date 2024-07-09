@@ -1,7 +1,19 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.config import database_url
+from app import config, secrets
 from sqlalchemy.orm import DeclarativeBase
+import urllib.parse
+
+
+def database_url() -> str:
+    return "postgresql+pg8000://{user}:{password}@{host}:{port}/{database}".format(
+        host=config.database_host(),
+        port=config.database_port(),
+        database=config.database_name(),
+        user=secrets.database_user(),
+        password=urllib.parse.quote(secrets.database_password()),
+    )
+
 
 engine = create_engine(database_url())
 session = sessionmaker(bind=engine)

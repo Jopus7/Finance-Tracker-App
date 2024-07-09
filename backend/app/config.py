@@ -13,5 +13,14 @@ def _environment_variable(variable_name: str, default: Optional[str] = None) -> 
     return variable_value
 
 
-def database_url() -> str:
-    return _environment_variable("DATABASE_URL")
+# Database
+def database_host() -> str:
+    return _environment_variable("DATABASE_HOST")
+
+
+def database_port() -> str:
+    return _environment_variable("DATABASE_PORT")
+
+
+def database_name() -> str:
+    return _environment_variable("DATABASE_NAME")
