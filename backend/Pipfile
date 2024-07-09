@@ -12,6 +12,8 @@ asyncpg = "*"
 psycopg2-binary = "*"
 
 [dev-packages]
+mypy = "*"
+ruff = "*"
 
 [requires]
 python_version = "3.12"

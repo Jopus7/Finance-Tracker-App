@@ -1,0 +1,17 @@
+version: "3"
+
+tasks:
+  db:console:
+    desc: Open database console
+    cmds:
+      - docker compose exec postgres psql zeus postgres
+
+  console:
+    desc: Open developement console
+    cmds:
+      - docker compose run --rm backend sh
+
+  start:
+    desc: Start development server (using real backend)
+    cmds:
+      - docker compose up
