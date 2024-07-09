@@ -8,6 +8,8 @@ fastapi = "*"
 uvicorn = "*"
 
 [dev-packages]
+mypy = "*"
+ruff = "*"
 
 [requires]
 python_version = "3.12"
