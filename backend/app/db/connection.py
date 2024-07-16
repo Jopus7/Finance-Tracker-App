@@ -16,7 +16,7 @@ def database_url() -> str:
 
 
 engine = create_engine(database_url())
-session = sessionmaker(bind=engine)
+_session = sessionmaker(bind=engine)
 
 
 class BaseModel(DeclarativeBase):
@@ -24,9 +24,10 @@ class BaseModel(DeclarativeBase):
         return str(self)
 
 
-def get_db():
-    db = session()
+def db_session():
+    db = _session()
     try:
         yield db
+        db.commit()
     finally:
         db.close()
