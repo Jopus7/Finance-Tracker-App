@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 from app.api.schemas import BaseOrmModel
 
@@ -6,12 +6,12 @@ from app.api.schemas import BaseOrmModel
 class UserIn(BaseModel):
     first_name: str
     last_name: str
-    email: EmailStr
+    email: str
     password: str
 
 
 class UserOut(BaseOrmModel):
     id: int
-    email: EmailStr
+    email: str
     first_name: str
     last_name: str
