@@ -17,6 +17,8 @@ types-passlib = "*"
 [dev-packages]
 mypy = "*"
 ruff = "*"
+pytest = "*"
+httpx = "*"
 
 [requires]
 python_version = "3.12"

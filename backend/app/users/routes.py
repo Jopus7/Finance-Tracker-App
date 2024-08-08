@@ -15,9 +15,3 @@ async def register_user(user_in: UserIn, dbs: Session = Depends(db_session)) -> 
     if db_user:
         raise HTTPException(status_code=400, detail="User with given email alredy exists")
     return create_user(dbs, user_in)
-
-
-@user_router.get("")
-async def get_users(dbs: Session = Depends(db_session)) -> list[User]:
-    users = dbs.query(User).all()
-    return users
