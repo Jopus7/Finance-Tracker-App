@@ -1,10 +1,10 @@
-from sqlalchemy.orm import Session
-from app.users.schemas import UserIn
-from app.users.models import User
 from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+
+from app.users.models import User
+from app.users.schemas import UserIn
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 
 def create_user(dbs: Session, user_in: UserIn) -> User:

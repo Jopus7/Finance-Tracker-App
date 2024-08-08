@@ -1,8 +1,10 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from app import config, secrets
-from sqlalchemy.orm import DeclarativeBase
 import urllib.parse
+from typing import Generator
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+
+from app import config, secrets
 
 
 def database_url() -> str:
@@ -24,7 +26,7 @@ class BaseModel(DeclarativeBase):
         return str(self)
 
 
-def db_session():
+def db_session() -> Generator[Session, None, None]:
     db = _session()
     try:
         yield db
