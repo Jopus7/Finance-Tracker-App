@@ -1,1 +1,1 @@
-from app.api.routes import app
+from tests.config.db import *
