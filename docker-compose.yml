@@ -1,6 +1,16 @@
 version: "3"
 
 services:
+  frontend:
+    depends_on:
+     - backend
+    build: ./frontend
+    container_name: finance_tracker_frontend
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:8000
+
   backend:
     depends_on:
       - postgres
