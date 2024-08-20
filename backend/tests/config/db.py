@@ -29,22 +29,26 @@ def test_database_url() -> str:
 @pytest.fixture(scope="session")
 def engine():
     engine = create_engine(test_database_url(), isolation_level="AUTOCOMMIT")
+    BaseModel.metadata.create_all(bind=engine)
     yield engine
+    BaseModel.metadata.drop_all(bind=engine)
     engine.dispose()
 
 
 @pytest.fixture()
 def session(engine):
-    BaseModel.metadata.drop_all(bind=engine)
-    BaseModel.metadata.create_all(bind=engine)
+    connection = engine.connect()
+    transaction = connection.begin()
 
-    local_session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    db = local_session()
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=connection)
+    db = SessionLocal()
 
     try:
         yield db
     finally:
         db.close()
+        transaction.rollback()
+        connection.close()
 
 
 @pytest.fixture()
