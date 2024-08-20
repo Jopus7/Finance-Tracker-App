@@ -9,7 +9,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def create_user(dbs: Session, user_in: UserIn) -> User:
     hashed_password = pwd_context.hash(user_in.password)
-    user_data = user_in.dict()
+    user_data = user_in.model_dump()
     user_data["password"] = hashed_password
     user = User(**user_data)
     dbs.add(user)
