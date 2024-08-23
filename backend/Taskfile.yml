@@ -7,6 +7,7 @@ tasks:
       - task: format
       - task: lint
       - task: typing
+      - task: test
   format:
     desc: Run formatter
     cmds:
@@ -23,3 +24,7 @@ tasks:
     desc: Run database migrations
     cmds:
       - alembic upgrade head
+  test:
+    desc: Run tests
+    cmds:
+      - python -m pytest {{ if .CLI_ARGS }}{{ .CLI_ARGS }}{{ else }}tests/{{ end }} 
