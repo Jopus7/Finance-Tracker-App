@@ -1,8 +1,10 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from app import config, secrets
-from sqlalchemy.orm import DeclarativeBase
 import urllib.parse
+from typing import Generator
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+
+from app import config, secrets
 
 
 def database_url() -> str:
@@ -16,7 +18,7 @@ def database_url() -> str:
 
 
 engine = create_engine(database_url())
-session = sessionmaker(bind=engine)
+_session = sessionmaker(bind=engine)
 
 
 class BaseModel(DeclarativeBase):
@@ -24,9 +26,10 @@ class BaseModel(DeclarativeBase):
         return str(self)
 
 
-def get_db():
-    db = session()
+def db_session() -> Generator[Session, None, None]:
+    db = _session()
     try:
         yield db
+        db.commit()
     finally:
         db.close()

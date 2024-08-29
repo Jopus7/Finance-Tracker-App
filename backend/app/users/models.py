@@ -1,12 +1,10 @@
 from datetime import datetime
-from app.db.models import BaseModel
-from sqlalchemy import BigInteger, String, DateTime
+
+from sqlalchemy import BigInteger, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
-from passlib.context import CryptContext
 
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from app.db.models import BaseModel
 
 
 class User(BaseModel):
@@ -18,9 +16,3 @@ class User(BaseModel):
     last_name: Mapped[str] = mapped_column(String)
     password: Mapped[str] = mapped_column(String)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-
-    def set_password(self, password: str) -> None:
-        self.password = pwd_context.hash(password)
-
-    def check_password(self, password: str) -> bool:
-        return pwd_context.verify(password, self.password)

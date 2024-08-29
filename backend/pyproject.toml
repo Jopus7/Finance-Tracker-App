@@ -1,0 +1,16 @@
+[tool.ruff]
+exclude = [
+    "__pycache__",
+    ".git",
+]
+line-length = 120
+
+[tool.ruff.lint.per-file-ignores]
+# F401 - imported but unused
+# F403 - unable to detect undefined names
+# E402 - module level import not at top of file
+"app/db/models.py" = ["F401", "F403"]
+"tests/conftest.py" = ["F401", "F403"]
+
+[tool.ruff.lint]
+extend-select = ["I"]

@@ -15,3 +15,7 @@ tasks:
     desc: Start development server (using real backend)
     cmds:
       - docker compose up
+  db:init:
+    desc: Initialize development environment
+    cmds:
+      - docker compose run --rm backend task migrate
