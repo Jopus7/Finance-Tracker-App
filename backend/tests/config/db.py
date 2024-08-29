@@ -2,7 +2,7 @@ import urllib.parse
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 from app.api.routes import app
@@ -26,18 +26,40 @@ def test_database_url() -> str:
     )
 
 
+def master_database_url() -> str:
+    return "postgresql+pg8000://{user}:{password}@{host}:{port}/postgres".format(
+        host=database_host(),
+        port=database_port(),
+        user=database_user(),
+        password=urllib.parse.quote(database_password()),
+    )
+
+
 @pytest.fixture(scope="session")
-def engine():
-    engine = create_engine(test_database_url(), isolation_level="AUTOCOMMIT")
-    BaseModel.metadata.create_all(bind=engine)
-    yield engine
-    BaseModel.metadata.drop_all(bind=engine)
-    engine.dispose()
+def create_test_database():
+    master_engine = create_engine(master_database_url(), isolation_level="AUTOCOMMIT")
+    with master_engine.connect() as connection:
+        connection.execute(text("DROP DATABASE IF EXISTS {db_name}".format(db_name=test_database_name())))
+        connection.execute(text("CREATE DATABASE {db_name}".format(db_name=test_database_name())))
+    master_engine.dispose()
+
+
+@pytest.fixture(scope="session")
+def engine(create_test_database):
+    return create_engine(test_database_url(), isolation_level="AUTOCOMMIT")
+
+
+@pytest.fixture(scope="session")
+def connection(engine):
+    with engine.connect() as connection:
+        with connection.begin():
+            BaseModel.metadata.create_all(bind=engine)
+        yield connection
+    connection.close()
 
 
 @pytest.fixture()
-def session(engine):
-    connection = engine.connect()
+def session(connection):
     transaction = connection.begin()
 
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=connection)
