@@ -2,8 +2,17 @@ import { useState } from "react"
 import axios from "axios"
 import { Container, Box, Typography, TextField, Button } from "@mui/material"
 import { postRequest } from "../api"
+// import { makeStyles } from "@mui/material/styles"
+
+
+// const useStyles = makeStyles({
+//     registerForm: {
+//         display: 'block',
+//     },
+// });
 
 export const RegisterForm = () => {
+    // const classes = useStyles();
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
@@ -29,7 +38,7 @@ export const RegisterForm = () => {
 
     return (
             <Container>
-                <Box>
+                <Box sx={{display: 'flex', flexDirectoin: 'column'}}>
                     <Typography variant="h2">Register User</Typography>
                     <form onSubmit={handleSubmit}>
                         <TextField
