@@ -1,7 +1,8 @@
 import { useState } from "react"
 import axios from "axios"
-import { Container, Box, Typography, TextField, Button } from "@mui/material"
+import { Container, Box, Typography, TextField, Button, Grid } from "@mui/material"
 import { postRequest } from "../api"
+import Paper from '@mui/material/Paper'
 // import { makeStyles } from "@mui/material/styles"
 
 
@@ -37,10 +38,15 @@ export const RegisterForm = () => {
     }
 
     return (
-            <Container>
-                <Box sx={{display: 'flex', flexDirectoin: 'column'}}>
-                    <Typography variant="h2">Register User</Typography>
+            <Container maxWidth="sm">
+                <Paper elevation={2} sx={{padding: 4, marginTop: 4}}>
+                    <Box sx={{texAlign: 'center', marginBottom: 2}} >
+                    <Typography variant="h4" color="primary" >Register User</Typography >
+                    </Box>
                     <form onSubmit={handleSubmit}>
+                        <Grid container spacing={2} justifyContent="center">
+                            <Grid item xs={12}>
+                                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                         <TextField
                         label="First name"
                         variant="outlined"
@@ -48,6 +54,10 @@ export const RegisterForm = () => {
                         onChange={(e) => setFirstName(e.target.value)}
                         required
                         />
+                        </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                         <TextField
                         label="Last name"
                         variant="outlined"
@@ -55,6 +65,10 @@ export const RegisterForm = () => {
                         onChange={(e) => setLastName(e.target.value)}
                         required
                         />
+                        </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                         <TextField
                         label="Email"
                         variant="outlined"
@@ -62,6 +76,10 @@ export const RegisterForm = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         />
+                        </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                         <TextField
                         label="Password"
                         type="password"
@@ -70,11 +88,14 @@ export const RegisterForm = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         />
-
-                        <Button variant="contained" type="submit">Register user</Button>
+                        </Box>
+                        </Grid>
+                        </Grid>
+                            <Box sx={{display: 'flex', justifyContent: 'center', marginTop: 3}}>
+                        <Button variant="contained" type="submit" style={{margin: '0 auto',padding: '0.6rem 1.2rem', border: 'none', display: 'flex'}}>Register user</Button>
+                        </Box>
                     </form> 
-                    
-                </Box> 
+                    </Paper>
             </Container>
     )
 }
