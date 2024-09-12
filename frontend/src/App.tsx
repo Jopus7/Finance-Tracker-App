@@ -5,7 +5,7 @@ import { RegisterForm } from './components/register-form';
 
 function App() {
   return (
-    <div>
+    <div >
     <RegisterForm/>
     </div>
   )
