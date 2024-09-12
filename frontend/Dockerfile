@@ -13,7 +13,5 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY . .
-RUN chmod +x ./entrypoint.sh
 
-ENTRYPOINT [ "./entrypoint.sh" ]
-CMD ["yarn", "start"]
+CMD ["yarn", "start", "--host", "0.0.0.0", "--port", "80"]
