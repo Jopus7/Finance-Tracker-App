@@ -38,10 +38,10 @@ export const RegisterForm = () => {
     }
 
     return (
-            <Container maxWidth="sm">
-                <Paper elevation={2} sx={{padding: 4, marginTop: 4}}>
+            <Container maxWidth="sm" >
+                <Paper elevation={2} sx={{padding: 4, marginTop: 4, bgcolor: "ghostwhite"}}>
                     <Box sx={{texAlign: 'center', marginBottom: 2}} >
-                    <Typography variant="h4" color="primary" >Register User</Typography >
+                    <Typography align="center" variant="h4" color="primary" >Register User</Typography >
                     </Box>
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2} justifyContent="center">

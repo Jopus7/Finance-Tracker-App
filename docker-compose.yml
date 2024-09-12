@@ -9,7 +9,7 @@ services:
     ports:
       - "3000:80"
     volumes:
-      - .:/app
+      - ./frontend:/app
     environment:
       - REACT_APP_BACKEND_URL=http://backend:8000
       - CHOKIDAR_USEPOLLING=true
