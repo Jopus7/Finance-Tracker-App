@@ -1,12 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { RegisterForm } from './components/register-form';
+import { HomePage } from './pages/home-page';
 
 function App() {
   return (
     <div >
-    <RegisterForm/>
+    <HomePage/>
     </div>
   )
 }
