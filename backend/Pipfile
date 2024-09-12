@@ -15,6 +15,7 @@ pg8000 = "*"
 types-passlib = "*"
 python-multipart = "*"
 python-jose = "*"
+types-python-jose = "*"
 
 [dev-packages]
 mypy = "*"
