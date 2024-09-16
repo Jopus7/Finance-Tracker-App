@@ -1,12 +1,14 @@
 import axios from "axios"
 
 
-const BASE_URL = "http://0.0.0.0:8000";
+const api = axios.create({
+    baseURL: "http://0.0.0.0:8000"
+})
 
 
 export const postRequest = async (endpoint: string, data: any) => {
     try {
-        const response = await axios.post(`${BASE_URL}${endpoint}`, data);
+        const response = await api.post(`/${endpoint}`, data);
         return response.data
     }
     catch (error) {
