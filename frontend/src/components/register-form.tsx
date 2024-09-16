@@ -30,7 +30,6 @@ export const RegisterForm = () => {
 
         try {
             const response = await postRequest("/api/users/register", userData);
-            console.log(response)
         } catch (error) {
             console.log(error);
         }
