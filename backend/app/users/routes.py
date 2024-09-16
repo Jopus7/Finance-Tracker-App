@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import authentication
 from app.db.connection import db_session
 from app.users.models import User
 from app.users.repository import create_user
@@ -15,3 +16,8 @@ async def register_user(user_in: UserIn, dbs: Session = Depends(db_session)) -> 
     if db_user:
         raise HTTPException(status_code=400, detail="User with given email alredy exists")
     return create_user(dbs, user_in)
+
+
+@user_router.get("/users/me/", response_model=UserOut)
+async def current_user(current_user: User = Depends(authentication)) -> User:
+    return current_user
