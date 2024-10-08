@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import date as dt_date
 
 from app.api.schemas import BaseOrmModel
 
@@ -8,7 +8,7 @@ class ExpenseIn(BaseModel):
     name: str
     description: str
     amount: float
-    date: datetime
+    date: dt_date
     
 class ExpenseOut(BaseOrmModel):
     id: int
@@ -16,4 +16,4 @@ class ExpenseOut(BaseOrmModel):
     user_id: int
     description: str
     amount: float
-    date: datetime
+    date: dt_date

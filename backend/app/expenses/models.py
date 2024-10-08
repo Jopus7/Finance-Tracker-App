@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import date as dt_date
 from typing import TYPE_CHECKING
-from sqlalchemy import BigInteger, DateTime, String, Float, ForeignKey
+from sqlalchemy import BigInteger, Date, String, Float, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.models import BaseModel
@@ -17,6 +17,6 @@ class Expense(BaseModel):
     user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"), index=True)
     description: Mapped[str] = mapped_column(String)
     amount: Mapped[float] = mapped_column(Float)
-    date: Mapped[datetime] = mapped_column(DateTime)
+    date: Mapped[dt_date] = mapped_column(Date)
     
     user: Mapped["User"] = relationship(back_populates="expenses")
