@@ -16,6 +16,7 @@ types-passlib = "*"
 python-multipart = "*"
 python-jose = "*"
 types-python-jose = "*"
+faker = "*"
 
 [dev-packages]
 mypy = "*"

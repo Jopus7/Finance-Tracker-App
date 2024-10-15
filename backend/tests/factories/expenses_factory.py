@@ -3,20 +3,21 @@ from collections import Counter
 from app.expenses.models import Expense
 
 @pytest.fixture
-def expense_factory(session):
+def expense_factory(session, user_factory):
     counter = Counter()
+    user = user_factory()
     
     def factory(
         name,
         description,
-        user_id,
         amount,
-        date
+        date,
+        user_id=None,
     ):
         expense = Expense(
             name=name,
             description=description,
-            user_id=user_id,
+            user_id=user_id or user.id,
             amount=amount,
             date=date
             )

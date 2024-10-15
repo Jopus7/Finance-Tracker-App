@@ -1,7 +1,6 @@
 import pytest
 from app.api.routes import app
 from app.auth.dependencies import authentication
-from app.users.models import User
 from app.db.connection import db_session
 from fastapi.testclient import TestClient
 
@@ -18,8 +17,8 @@ def client(session):
 
 
 @pytest.fixture
-def authenticated_user():
-    test_user = User(first_name="Chris", last_name="Smith", email="chris.smith@gmail.com", password="test_password")
+def authenticated_user(user_factory):
+    test_user = user_factory(first_name="Chris")
     
     app.dependency_overrides[authentication] = lambda: test_user
     

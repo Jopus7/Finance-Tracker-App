@@ -37,14 +37,35 @@ def test_create_expense_when_user_unauthenticated(client):
     )
     assert response.status_code == 401
 
-def test_expenses_list(client, authenticated_user, session, expense_factory):
+
+def test_expenses_list(client, authenticated_user, expense_factory):
     
-    expense_factory(name="a", description="a", amount=1, user_id=authenticated_user.id, date=date(2024, 10, 10))
+    expense_1 = expense_factory(name="Zakupy", description="Masło", amount=5.99, user_id=authenticated_user.id, date=date(2024, 10, 10))
+    expense_2 = expense_factory(name="Zakupy", description="Jajka", amount=4.99, user_id=authenticated_user.id, date=date(2024, 10, 10))
+    expense_factory(name="Zakupy", description="Sałata", amount=5.99, date=date(2024, 10, 10))
+    
     
     response = client.get(
         "api/expenses",
         )
     
-    breakpoint()
-    
     assert response.status_code == 200
+
+    assert response.json() == [
+        {
+          "id": expense_1.id,
+          "name": expense_1.name,
+          "user_id": authenticated_user.id,
+          "description": expense_1.description,
+          "amount": 5.99,
+          "date": "2024-10-10"
+        },
+        {
+          "id": expense_2.id,
+          "name": expense_2.name,
+          "user_id": authenticated_user.id,
+          "description": expense_2.description,
+          "amount": 4.99,
+          "date": "2024-10-10"
+        },
+    ]
