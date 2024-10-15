@@ -69,3 +69,11 @@ def test_expenses_list(client, authenticated_user, expense_factory):
           "date": "2024-10-10"
         },
     ]
+    
+def test_expense_detail(client, authenticated_user, session, expense_factory):
+    expense_factory(name="a", description="a", amount=1, user_id=authenticated_user.id, date=date(2024, 10, 10))
+
+    response = client.get(
+        "/api/expenses/{expense.id}",
+        )
+    assert response.status_code == 200
