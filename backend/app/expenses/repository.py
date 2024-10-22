@@ -16,3 +16,11 @@ def get_expenses(dbs: Session, user: User) -> list[Expense]:
 
 def get_expense_by_id(dbs: Session, expense_id: int) -> Optional[Expense]:
     return dbs.query(Expense).filter(Expense.id == expense_id).first()
+
+def delete_expense(dbs: Session, expense_id: int):
+    expense = dbs.query(Expense).filter(Expense.id == expense_id).first()
+    if expense:
+        dbs.delete(expense)
+        dbs.commit()
+    else:
+        raise Exception("Expense not found")

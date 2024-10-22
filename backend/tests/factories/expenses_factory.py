@@ -5,19 +5,18 @@ from app.expenses.models import Expense
 @pytest.fixture
 def expense_factory(session, user_factory):
     counter = Counter()
-    user = user_factory()
     
     def factory(
         name,
         description,
         amount,
         date,
-        user_id=None,
+        user=None,
     ):
         expense = Expense(
             name=name,
             description=description,
-            user_id=user_id or user.id,
+            user=user or user_factory(),
             amount=amount,
             date=date
             )
