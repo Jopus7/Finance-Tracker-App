@@ -1,11 +1,13 @@
-import pytest
-from faker import Faker
-from app.users.models import User
 from collections import Counter
 from datetime import datetime, timezone
 
+import pytest
+from faker import Faker
+
+from app.users.models import User
 
 fake = Faker()
+
 
 @pytest.fixture
 def user_factory(session):
@@ -23,7 +25,7 @@ def user_factory(session):
             first_name=first_name or fake.first_name(),
             last_name=last_name or fake.last_name(),
             password=password or "password",
-            created_at=created_at or datetime.now(timezone.utc)
+            created_at=created_at or datetime.now(timezone.utc),
         )
         session.add(user)
         session.commit()
