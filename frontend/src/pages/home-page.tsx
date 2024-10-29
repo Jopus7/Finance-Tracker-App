@@ -1,33 +1,38 @@
 import React, { useContext } from 'react';
-import { Container, Typography, Button } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import { AuthContext } from '../context/auth-context';
+import { NavBar } from '../components/navbar';
+import { AddExpenseDialog } from '../components/add-expense-dialog';
 
 
 const HomePage = () => {
   const auth = useContext(AuthContext);
 
-  const handleLogout = () => {
-    if (auth) {
-      auth.logout();
-    }
-  };
+  const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
+
+  const handleClickOpen = () => {
+    setDialogOpen(true)
+  }
+
+  const handleDialogClose = () => {
+    setDialogOpen(false)
+  }
+
 
   if (!auth || !auth.user) {
     return <Typography>Loading...</Typography>;
   }
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" gutterBottom>
-        Welcome, {auth.user.first_name}
-      </Typography>
-      <Typography>Email: {auth.user.email}</Typography>
-      <Typography>First Name: {auth.user.first_name}</Typography>
-      <Typography>Last Name: {auth.user.last_name}</Typography>
-      <Button variant="contained" color="secondary" onClick={handleLogout}>
-        Logout
-      </Button>
+    <div>
+    <NavBar/>
+    <Container maxWidth="sm" sx={{marginTop: 4}}>
+      <Box textAlign="center">
+          <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Expense</Button>
+      </Box>
+      <AddExpenseDialog open={dialogOpen} onClose={handleDialogClose}/>
     </Container>
+    </div>
   );
 };
 
