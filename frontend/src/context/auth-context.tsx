@@ -3,17 +3,22 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api';
 
+interface User {
+  email: string;
+  first_name: string;
+  last_name: string;
+}
+
 interface AuthContextType {
-  user: any;
+  user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
 }
-
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
   const login = async (email: string, password: string) => {
@@ -22,8 +27,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { access_token } = response.data;
       localStorage.setItem('token', access_token);
 
-      const decodedToken: any = jwtDecode(access_token);
-      setUser({ email: decodedToken.sub });
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+
+      const userResponse = await axiosInstance.get('/api/users/me');
+      setUser(userResponse.data);
 
       navigate('/home');
     } catch (error) {
@@ -42,7 +49,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (token) {
       const decodedToken: any = jwtDecode(token);
       if (decodedToken.exp * 1000 > Date.now()) {
-        setUser({ email: decodedToken.sub });
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        axiosInstance.get('/api/users/me')
+          .then(response => {
+            setUser(response.data);
+          })
+          .catch(error => {
+            console.error('Failed to fetch user:', error);
+            logout();
+          });
       } else {
         logout();
       }
