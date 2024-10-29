@@ -1,14 +1,27 @@
-import { Tabs, Tab, Box, Typography, Container, Paper } from '@mui/material';
-import { RegisterForm } from '../components/register-form';
-import { LoginForm } from '../components/login-form';
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+import { Container, Typography, Button } from '@mui/material';
+import { AuthContext } from '../context/auth-context';
 
-export const HomePage = () => {
-    const [activeTab, setActiveTab] = useState(0)
+const HomePage = () => {
+  const auth = useContext(AuthContext);
 
-    return (
-        <Container maxWidth="sm">
-            <LoginForm/>
-        </Container>
-    )
-}
+  const handleLogout = () => {
+    if (auth) {
+      auth.logout();
+    }
+  };
+
+  return (
+    <Container maxWidth="sm">
+      <Typography variant="h4" gutterBottom>
+        Welcome, {auth?.user?.email}
+      </Typography>
+      <Typography>{auth?.user.first_name}</Typography>
+      <Button variant="contained" color="secondary" onClick={handleLogout}>
+        Logout
+      </Button>
+    </Container>
+  );
+};
+
+export default HomePage;
