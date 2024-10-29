@@ -1,18 +1,20 @@
 import axios from "axios"
 
 
-const api = axios.create({
+const axiosInstance = axios.create({
     baseURL: "http://0.0.0.0:8000"
 })
 
 
-export const postRequest = async (endpoint: string, data: any) => {
-    try {
-        const response = await api.post(`/${endpoint}`, data);
-        return response.data
-    }
-    catch (error) {
-        console.log(error)
-        throw error
-    }
-}
+axiosInstance.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem('token');
+      if (token && config.headers) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
+  
+  export default axiosInstance;
