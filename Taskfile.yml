@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 tasks:
   db:console:
@@ -19,3 +19,7 @@ tasks:
     desc: Initialize development environment
     cmds:
       - docker compose run --rm backend task migrate
+  docker:reset:
+    desc: solution when address already in use in docker
+    cmds:
+      - sudo ss -lptn 'sport = :5432'
