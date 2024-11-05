@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api';
 
+
 interface User {
   email: string;
   first_name: string;
@@ -15,10 +16,12 @@ interface AuthContextType {
   logout: () => void;
   isAuthenticated: boolean;
 }
+
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const login = async (email: string, password: string) => {
@@ -27,9 +30,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { access_token } = response.data;
       localStorage.setItem('token', access_token);
 
-      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-
-      const userResponse = await axiosInstance.get('/api/users/me');
+      // Fetch user details
+      const userResponse = await axiosInstance.get('/api/users/me/');
       setUser(userResponse.data);
 
       navigate('/home');
@@ -47,23 +49,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      const decodedToken: any = jwtDecode(token);
-      if (decodedToken.exp * 1000 > Date.now()) {
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        axiosInstance.get('/api/users/me')
-          .then(response => {
-            setUser(response.data);
-          })
-          .catch(error => {
-            console.error('Failed to fetch user:', error);
-            logout();
-          });
-      } else {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        if (decodedToken.exp * 1000 > Date.now()) {
+          // Fetch user details
+          axiosInstance.get('/api/users/me/')
+            .then(response => {
+              setUser(response.data);
+              setLoading(false);
+            })
+            .catch(error => {
+              console.error('Failed to fetch user:', error);
+              logout();
+              setLoading(false);
+            });
+        } else {
+          // Token is expired
+          logout();
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Invalid token:', error);
         logout();
+        setLoading(false);
       }
+    } else {
+      setLoading(false);
     }
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
