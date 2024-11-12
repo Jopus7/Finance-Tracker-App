@@ -10,7 +10,7 @@ type ExpenseData = {
     name: string
     description: string
     amount: number
-    date: Dayjs
+    date: Dayjs | null
 }
 
 type AddExpenseDialogProps = {
@@ -57,14 +57,14 @@ export const AddExpenseDialog = ({open, onClose} : AddExpenseDialogProps) => {
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Add Expense</DialogTitle>
+            <DialogTitle align="center" >Add Expense</DialogTitle>
             <form onSubmit={handleSubmit}>
-            <DialogContent>
-                <TextField autoFocus label="Name" name="name" type="text" variant="outlined" value={expenseData.name} onChange={handleInputChange} fullWidth required></TextField>
-                <TextField autoFocus label="Description" name="description" type="text" variant="outlined" value={expenseData.description} onChange={handleInputChange} fullWidth required></TextField>
-                <TextField autoFocus label="Amount" name="amount" type="number" variant="outlined" value={expenseData.amount} onChange={handleInputChange} fullWidth required></TextField>
+            <DialogContent >
+                <TextField autoFocus label="Name" name="name" type="text" variant="outlined" value={expenseData.name} onChange={handleInputChange} margin="normal" fullWidth required></TextField>
+                <TextField autoFocus label="Description" name="description" type="text" variant="outlined" value={expenseData.description} onChange={handleInputChange} margin="normal" fullWidth required></TextField>
+                <TextField autoFocus label="Amount" name="amount" type="number" variant="outlined" value={expenseData.amount} onChange={handleInputChange} margin="normal" fullWidth required></TextField>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateField autoFocus label="Date" name="date" value={expenseData.date} onChange={handleDateChange} required></DateField>
+                <DateField autoFocus label="Date" name="date" value={expenseData.date} onChange={handleDateChange} margin="normal" required></DateField>
                 </LocalizationProvider>
 
                 
@@ -76,4 +76,4 @@ export const AddExpenseDialog = ({open, onClose} : AddExpenseDialogProps) => {
             </form>
         </Dialog>
     )
-}
+} 
