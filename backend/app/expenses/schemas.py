@@ -10,6 +10,7 @@ class ExpenseIn(BaseModel):
     description: str
     amount: float
     date: dt_date
+    category_id: int
 
 
 class ExpenseOut(BaseOrmModel):
