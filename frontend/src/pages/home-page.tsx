@@ -3,6 +3,7 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import { AuthContext } from '../context/auth-context';
 import { NavBar } from '../components/navbar';
 import { AddExpenseDialog } from '../components/add-expense-dialog';
+import { ExpensesList } from '../components/expenses-list';
 
 
 const HomePage = () => {
@@ -30,6 +31,7 @@ const HomePage = () => {
       <Box textAlign="center">
           <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Expense</Button>
       </Box>
+      <ExpensesList />
       <AddExpenseDialog open={dialogOpen} onClose={handleDialogClose}/>
     </Container>
     </div>
