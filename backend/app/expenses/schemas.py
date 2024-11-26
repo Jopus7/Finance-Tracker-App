@@ -20,3 +20,4 @@ class ExpenseOut(BaseOrmModel):
     description: str
     amount: float
     date: dt_date
+    category_id: int

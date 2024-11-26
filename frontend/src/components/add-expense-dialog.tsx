@@ -11,7 +11,7 @@ type ExpenseData = {
     description: string
     amount: number
     date: Dayjs | null
-    category_id: number
+    categoryId: number
 }
 
 type Category = {
@@ -22,12 +22,13 @@ type Category = {
 type AddExpenseDialogProps = {
     open: boolean;
     onClose: () => void;
+    onExpenseAdd: () => void;
 }
 
 
 
-export const AddExpenseDialog = ({open, onClose} : AddExpenseDialogProps) => {
-    const [expenseData, setExpenseData] = useState<ExpenseData>({name: '', description: '', amount: 0, date: dayjs(), category_id: 0})
+export const AddExpenseDialog = ({open, onClose, onExpenseAdd} : AddExpenseDialogProps) => {
+    const [expenseData, setExpenseData] = useState<ExpenseData>({name: '', description: '', amount: 0, date: dayjs(), categoryId: 1})
 
     const [categories, setCategories] = useState<Category[]>([])
 
@@ -64,10 +65,12 @@ export const AddExpenseDialog = ({open, onClose} : AddExpenseDialogProps) => {
             const response = await axiosInstance.post('/api/expenses', {
                 ...expenseData,
                 date: expenseData.date ? expenseData.date.format("YYYY-MM-DD") : null,
+                category_id: expenseData.categoryId
             });
 
             if (response.status === 200) {
                 onClose()
+                onExpenseAdd()
             }
           }
           catch (error) {
@@ -82,7 +85,7 @@ export const AddExpenseDialog = ({open, onClose} : AddExpenseDialogProps) => {
             <DialogTitle align="center" >Add Expense</DialogTitle>
             <form onSubmit={handleSubmit}>
             <DialogContent >
-                <TextField autoFocus select name="categoryId" value={expenseData.category_id} label="Category" onChange={handleInputChange} fullWidth required>
+                <TextField autoFocus select name="categoryId" value={expenseData.categoryId} label="Category" onChange={handleInputChange} fullWidth required>
                     {categories.map((category) => (
                     <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
                     ))}

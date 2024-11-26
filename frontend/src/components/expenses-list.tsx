@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import axiosInstance from "../api";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box} from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { AddExpenseDialog } from "./add-expense-dialog";
 
 
 type Expense = {
@@ -11,26 +12,40 @@ type Expense = {
     description: string
     amount: number
     date: string
-    category_name: string
+    category_id: number
 }
 type Order = "asc" | "desc"
 
 export const ExpensesList = () => {
+
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
+  const handleClickOpen = () => {
+    setDialogOpen(true)
+  }
+
+  const handleDialogClose = () => {
+    setDialogOpen(false)
+  }
+
+
+
     const [expenses, setExpenses] = useState<Expense[]>([])
     const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([])
     const [order, setOrder] = useState<Order>("asc")
     const [orderBy, setOrderBy] = useState<keyof Expense>("date")
 
+    const fetchExpenses = async () => {
+      try {
+          const response = await axiosInstance.get<Expense[]>("/api/expenses")
+          setExpenses(response.data)
+          setFilteredExpenses(response.data)
+      } catch(err) {
+          console.error('Fetching expenses failed', err)
+      }
+  }
+
     useEffect(() => {
-        const fetchExpenses = async () => {
-            try {
-                const response = await axiosInstance.get<Expense[]>("/api/expenses")
-                setExpenses(response.data)
-                setFilteredExpenses(response.data)
-            } catch(err) {
-                console.error('Fetching expenses failed', err)
-            }
-        }
         fetchExpenses();
     }, [])
 
@@ -52,6 +67,7 @@ export const ExpensesList = () => {
     const navigate = useNavigate()
     })
     return (
+      <Container>
         <TableContainer component={Paper} style={{ marginTop: "10px", width: "150%", alignItems: "center" }}>
           <Table>
             <TableHead>
@@ -102,7 +118,7 @@ export const ExpensesList = () => {
                   <TableCell>{expense.date}</TableCell>
                   <TableCell>{expense.name}</TableCell>
                   <TableCell>{expense.description}</TableCell>
-                  <TableCell>{expense.category_name}</TableCell>
+                  <TableCell>{expense.category_id}</TableCell>
                   <TableCell>{expense.amount.toFixed(2)} zł</TableCell>
                   <TableCell>
                     <Button
@@ -116,5 +132,10 @@ export const ExpensesList = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Box textAlign="center">
+          <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Expense</Button>
+       </Box>
+            <AddExpenseDialog open={dialogOpen} onClose={handleDialogClose} onExpenseAdd={fetchExpenses}/>
+        </Container>
       );
     };
