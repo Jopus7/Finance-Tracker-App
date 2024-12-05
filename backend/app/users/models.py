@@ -8,8 +8,8 @@ from sqlalchemy.sql import func
 from app.db.models import BaseModel
 
 if TYPE_CHECKING:
-    from app.expenses.models import Expense
     from app.categories.models import Category
+    from app.expenses.models import Expense
 
 
 class User(BaseModel):

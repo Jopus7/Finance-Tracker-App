@@ -6,8 +6,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.models import BaseModel
 
 if TYPE_CHECKING:
-    from app.users.models import User
     from app.expenses.models import Expense
+    from app.users.models import User
 
 
 class Category(BaseModel):

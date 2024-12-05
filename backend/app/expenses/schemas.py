@@ -1,4 +1,5 @@
 from datetime import date as dt_date
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -10,10 +11,10 @@ class ExpenseIn(BaseModel):
     description: str
     amount: float
     date: dt_date
-    category_id: int
+    category_id: Optional[int]
 
 
-class ExpenseOutTest(BaseOrmModel):
+class ExpenseOutListItem(BaseOrmModel):
     id: int
     name: str
     user_id: int
@@ -30,4 +31,4 @@ class ExpenseOut(BaseOrmModel):
     description: str
     amount: float
     date: dt_date
-    category_id: int
+    category_id: Optional[int]
