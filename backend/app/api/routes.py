@@ -2,6 +2,7 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth.routes import auth_router
+from app.categories.routes import category_router
 from app.expenses.routes import expense_router
 from app.users.routes import user_router
 
@@ -11,6 +12,7 @@ api_router = APIRouter()
 api_router.include_router(user_router, prefix="/users")
 api_router.include_router(auth_router, prefix="/auth")
 api_router.include_router(expense_router, prefix="/expenses")
+api_router.include_router(category_router, prefix="/categories")
 
 app.include_router(api_router, prefix="/api")
 

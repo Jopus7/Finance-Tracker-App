@@ -8,6 +8,7 @@ from sqlalchemy.sql import func
 from app.db.models import BaseModel
 
 if TYPE_CHECKING:
+    from app.categories.models import Category
     from app.expenses.models import Expense
 
 
@@ -22,3 +23,4 @@ class User(BaseModel):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     expenses: Mapped[list["Expense"]] = relationship(back_populates="user")
+    categories: Mapped[list["Category"]] = relationship(back_populates="user", cascade="all, delete")

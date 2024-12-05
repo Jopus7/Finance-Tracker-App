@@ -5,10 +5,20 @@ from fastapi import status
 from app.expenses.models import Expense
 
 
-def test_create_expense(client, authenticated_user, session):
+def test_create_expense(client, authenticated_user, session, category_factory):
+    category = category_factory(name="Food")
+
     response = client.post(
-        "api/expenses", json={"name": "zakupy", "description": "Tesco", "amount": 80.0, "date": "2024-10-08"}
+        "api/expenses",
+        json={
+            "name": "zakupy",
+            "description": "Tesco",
+            "amount": 80.0,
+            "date": "2024-10-08",
+            "category_id": category.id,
+        },
     )
+
     assert response.status_code == 200
 
     assert session.query(Expense).count() == 1
@@ -21,25 +31,46 @@ def test_create_expense(client, authenticated_user, session):
         "description": "Tesco",
         "amount": 80.0,
         "date": "2024-10-08",
+        "category_id": category.id,
     }
 
 
-def test_create_expense_when_user_unauthenticated(client):
+def test_create_expense_when_user_unauthenticated(client, category_factory):
+    category = category_factory(name="Food")
     response = client.post(
-        "api/expenses", json={"name": "zakupy", "description": "Tesco", "amount": 80.0, "date": "2024-10-08"}
+        "api/expenses",
+        json={
+            "name": "zakupy",
+            "description": "Tesco",
+            "amount": 80.0,
+            "date": "2024-10-08",
+            "category_id": category.id,
+        },
     )
     assert response.status_code == 401
 
 
-def test_expenses_list(client, authenticated_user, expense_factory):
-    expense_1 = expense_factory(
-        name="Zakupy", description="Masło", amount=5.99, user=authenticated_user, date=date(2024, 10, 10)
-    )
-    expense_2 = expense_factory(
-        name="Zakupy", description="Jajka", amount=4.99, user=authenticated_user, date=date(2024, 10, 10)
-    )
-    expense_factory(name="Zakupy", description="Sałata", amount=5.99, date=date(2024, 10, 10))
+def test_expenses_list(client, authenticated_user, expense_factory, category_factory):
+    category = category_factory(name="Food")
 
+    expense_1 = expense_factory(
+        name="Zakupy",
+        description="Masło",
+        amount=5.99,
+        user=authenticated_user,
+        date=date(2024, 10, 10),
+        category=category,
+    )
+
+    expense_2 = expense_factory(
+        name="Zakupy",
+        description="Jajka",
+        amount=4.99,
+        user=authenticated_user,
+        date=date(2024, 10, 10),
+        category=category,
+    )
+    expense_factory(name="Zakupy", description="Sałata", amount=5.99, date=date(2024, 10, 10), category=category)
     response = client.get(
         "api/expenses",
     )
@@ -54,6 +85,7 @@ def test_expenses_list(client, authenticated_user, expense_factory):
             "description": expense_1.description,
             "amount": 5.99,
             "date": "2024-10-10",
+            "category_name": "Food",
         },
         {
             "id": expense_2.id,
@@ -62,13 +94,20 @@ def test_expenses_list(client, authenticated_user, expense_factory):
             "description": expense_2.description,
             "amount": 4.99,
             "date": "2024-10-10",
+            "category_name": "Food",
         },
     ]
 
 
-def test_expense_detail(client, authenticated_user, expense_factory):
+def test_expense_detail(client, authenticated_user, expense_factory, category_factory):
+    category = category_factory(name="Food")
     expense = expense_factory(
-        name="Car fix", description="tire change", amount=200.59, user=authenticated_user, date=date(2024, 10, 10)
+        name="Car fix",
+        description="tire change",
+        amount=200.59,
+        user=authenticated_user,
+        date=date(2024, 10, 10),
+        category=category,
     )
 
     response = client.get(
@@ -82,6 +121,7 @@ def test_expense_detail(client, authenticated_user, expense_factory):
         "description": "tire change",
         "amount": 200.59,
         "date": "2024-10-10",
+        "category_id": category.id,
     }
 
 
@@ -122,5 +162,6 @@ def test_expense_delete(client, session, authenticated_user, expense_factory):
         "user_id": authenticated_user.id,
         "amount": 100.00,
         "date": "2024-10-22",
+        "category_id": None,
     }
     assert session.query(Expense).count() == 0
