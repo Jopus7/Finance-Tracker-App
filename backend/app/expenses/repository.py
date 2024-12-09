@@ -1,5 +1,6 @@
 from typing import Any, Optional
 
+from sqlalchemy import asc, desc
 from sqlalchemy.orm import Session
 
 from app.categories.models import Category
@@ -16,7 +17,10 @@ def create_expense(dbs: Session, user: User, expense_in: ExpenseIn) -> Expense:
     return expense
 
 
-def get_expenses(dbs: Session, user: User) -> list[Any]:
+def get_expenses(dbs: Session, user: User, sort_by: str = "date", order: str = "desc") -> list[Any]:
+    sort_column = getattr(Expense, sort_by)
+    order_by = asc(sort_column) if order == "asc" else desc(sort_column)  # type: ignore
+
     expenses = (
         dbs.query(
             Expense.id,
@@ -29,6 +33,7 @@ def get_expenses(dbs: Session, user: User) -> list[Any]:
         )
         .join(Expense.category)
         .filter(Expense.user_id == user.id)
+        .order_by(order_by)
         .all()
     )
 

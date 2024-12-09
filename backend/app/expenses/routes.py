@@ -20,8 +20,10 @@ async def expense_create(
 
 
 @expense_router.get("/", response_model=list[ExpenseOutListItem])
-async def expense_list(dbs: Session = Depends(db_session), user: User = Depends(authentication)) -> list[Expense]:
-    return get_expenses(dbs, user)
+async def expense_list(
+    sort_by: str = "date", order: str = "desc", dbs: Session = Depends(db_session), user: User = Depends(authentication)
+) -> list[Expense]:
+    return get_expenses(dbs, user, sort_by, order)
 
 
 @expense_router.get("/{expense_id}", response_model=ExpenseOut)
