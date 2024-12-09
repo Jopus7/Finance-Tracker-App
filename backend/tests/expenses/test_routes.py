@@ -99,6 +99,63 @@ def test_expenses_list(client, authenticated_user, expense_factory, category_fac
     ]
 
 
+def test_expenses_list_filter_by_category_name(client, authenticated_user, expense_factory, category_factory):
+    food_category = category_factory(name="Food")
+    bills_category = category_factory(name="Bills")
+
+    expense_factory(
+        name="Zakupy",
+        description="Masło",
+        amount=5.99,
+        user=authenticated_user,
+        date=date(2024, 10, 10),
+        category=food_category,
+    )
+
+    expense_2 = expense_factory(
+        name="Netflix",
+        description="Subscription",
+        amount=4.99,
+        user=authenticated_user,
+        date=date(2024, 10, 10),
+        category=bills_category,
+    )
+
+    expense_3 = expense_factory(
+        name="Warm water",
+        description="Invoice",
+        amount=28.99,
+        user=authenticated_user,
+        date=date(2024, 10, 10),
+        category=bills_category,
+    )
+
+    response = client.get("api/expenses", params={"category_name": "Bills"})
+
+    assert response.status_code == 200
+
+    assert response.json() == [
+        {
+            "id": expense_2.id,
+            "name": "Netflix",
+            "user_id": authenticated_user.id,
+            "description": "Subscription",
+            "amount": 4.99,
+            "date": "2024-10-10",
+            "category_name": "Bills",
+        },
+        {
+            "id": expense_3.id,
+            "name": "Warm water",
+            "user_id": authenticated_user.id,
+            "description": "Invoice",
+            "amount": 28.99,
+            "date": "2024-10-10",
+            "category_name": "Bills",
+        },
+    ]
+
+
 def test_expense_detail(client, authenticated_user, expense_factory, category_factory):
     category = category_factory(name="Food")
     expense = expense_factory(

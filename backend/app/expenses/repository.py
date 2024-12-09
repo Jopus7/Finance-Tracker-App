@@ -17,11 +17,13 @@ def create_expense(dbs: Session, user: User, expense_in: ExpenseIn) -> Expense:
     return expense
 
 
-def get_expenses(dbs: Session, user: User, sort_by: str = "date", order: str = "desc") -> list[Any]:
+def get_expenses(
+    dbs: Session, user: User, sort_by: str = "date", order: str = "desc", category_name: Optional[str] = None
+) -> list[Any]:
     sort_column = getattr(Expense, sort_by)
     order_by = asc(sort_column) if order == "asc" else desc(sort_column)  # type: ignore
 
-    expenses = (
+    expenses_query = (
         dbs.query(
             Expense.id,
             Expense.name,
@@ -33,11 +35,12 @@ def get_expenses(dbs: Session, user: User, sort_by: str = "date", order: str = "
         )
         .join(Expense.category)
         .filter(Expense.user_id == user.id)
-        .order_by(order_by)
-        .all()
     )
 
-    return expenses
+    if category_name:
+        expenses_query = expenses_query.filter(Category.name == category_name)
+
+    return expenses_query.order_by(order_by).all()
 
 
 def get_expense_by_id(dbs: Session, expense_id: int) -> Optional[Expense]:
