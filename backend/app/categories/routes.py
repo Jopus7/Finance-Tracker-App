@@ -15,4 +15,5 @@ category_router = APIRouter()
 async def category_list(
     current_user: User = Depends(authentication), dbs: Session = Depends(db_session)
 ) -> list[Category]:
-    return get_user_categories(dbs, current_user)
+    categories = get_user_categories(dbs, current_user)
+    return categories
