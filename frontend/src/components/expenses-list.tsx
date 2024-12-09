@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AddExpenseDialog } from "./add-expense-dialog";
 
 
+
 type Expense = {
     id: number
     name: string
@@ -18,6 +19,8 @@ type Expense = {
 export const ExpensesList = () => {
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [sortBy, setSortBy] = useState<string>("date");
+  const [order, setOrder] =  useState<"asc" | "desc">("desc");
 
   const handleClickOpen = () => {
     setDialogOpen(true)
@@ -29,9 +32,21 @@ export const ExpensesList = () => {
   
     const [expenses, setExpenses] = useState<Expense[]>([])
 
+    const handleSort = (column: string) => {
+      const newOrder = order === "asc" ? "desc" : "asc"
+      setOrder(newOrder)
+      setSortBy(column)
+
+    }
+
     const fetchExpenses = async () => {
       try {
-          const response = await axiosInstance.get<Expense[]>("/api/expenses")
+          const response = await axiosInstance.get<Expense[]>("/api/expenses/", {
+            params: {
+              sort_by: sortBy,
+              order: order
+            }
+          })
           setExpenses(response.data)
       } catch(err) {
           console.error('Fetching expenses failed', err)
@@ -40,7 +55,7 @@ export const ExpensesList = () => {
 
     useEffect(() => {
         fetchExpenses();
-    }, [])
+    }, [sortBy, order])
 
     return (
       <Container>
@@ -49,7 +64,13 @@ export const ExpensesList = () => {
             <TableHead>
               <TableRow>
                 <TableCell>
+                <TableSortLabel
+                  active={sortBy == "date"}
+                  direction={order}
+                  onClick={() => handleSort("date")}
+                >
                     Date
+                </TableSortLabel>
                 </TableCell>
                 <TableCell>
                     Name
@@ -59,7 +80,13 @@ export const ExpensesList = () => {
                     Category
                 </TableCell>
                 <TableCell>
+                <TableSortLabel
+                  active={sortBy == "amount"}
+                  direction={order}
+                  onClick={() => handleSort("amount")}
+                >
                     Amount
+                </TableSortLabel>
                 </TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
