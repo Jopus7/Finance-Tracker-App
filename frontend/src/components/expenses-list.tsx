@@ -4,6 +4,7 @@ import axiosInstance from "../api";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box, TextField, MenuItem} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AddExpenseDialog } from "./add-expense-dialog";
+import { CategoryDropdown } from "./category-dropdown";
 
 
 type Expense = {
@@ -79,13 +80,14 @@ export const ExpensesList = () => {
 
     return (
       <Container>
-      <Box>
-      <TextField select value={selectedCategory} label="fiilter by category" onChange={(e) => setSelectedCategory(e.target.value)} fullWidth>
-                    <MenuItem value="All Categories">All Categories</MenuItem>
-                    {categories.map((category) => (
-                    <MenuItem key={category.id} value={category.name}>{category.name}</MenuItem>
-                    ))}
-                </TextField>
+      <Box sx={{marginTop: 2, marginBottom: 2 }}>
+          <CategoryDropdown 
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              categories={categories}
+              label="fiilter by category"
+              showAllCategories={true}
+          />
       </Box>
         <TableContainer component={Paper} style={{ marginTop: "10px", width: "100%", alignItems: "center" }}>
           <Table>
