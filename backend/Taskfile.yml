@@ -28,3 +28,7 @@ tasks:
     desc: Run tests
     cmds:
       - python -m pytest {{ if .CLI_ARGS }}{{ .CLI_ARGS }}{{ else }}tests/{{ end }} 
+  seed:
+    desc: Seed database with initial data
+    cmds:
+      - python -m scripts.db_seed
