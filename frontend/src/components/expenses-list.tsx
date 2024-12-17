@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import axiosInstance from "../api";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box} from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box, TextField, MenuItem} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AddExpenseDialog } from "./add-expense-dialog";
 
@@ -27,7 +27,7 @@ export const ExpensesList = () => {
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [sortBy, setSortBy] = useState<string>("date");
   const [order, setOrder] =  useState<"asc" | "desc">("desc");
-  const [selectedCategory, setSelectedCategory] = useState<string>(""); 
+  const [selectedCategory, setSelectedCategory] = useState<string>("All Categories"); 
   const [categories, setCategories] = useState<Category[]>([]);
 
   const handleClickOpen = () => {
@@ -75,10 +75,18 @@ export const ExpensesList = () => {
 
     useEffect(() => {
         fetchExpenses();
-    }, [sortBy, order])
+    }, [sortBy, order, selectedCategory])
 
     return (
       <Container>
+      <Box>
+      <TextField select value={selectedCategory} label="fiilter by category" onChange={(e) => setSelectedCategory(e.target.value)} fullWidth>
+                    <MenuItem value="All Categories">All Categories</MenuItem>
+                    {categories.map((category) => (
+                    <MenuItem key={category.id} value={category.name}>{category.name}</MenuItem>
+                    ))}
+                </TextField>
+      </Box>
         <TableContainer component={Paper} style={{ marginTop: "10px", width: "100%", alignItems: "center" }}>
           <Table>
             <TableHead>

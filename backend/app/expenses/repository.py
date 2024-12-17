@@ -37,7 +37,8 @@ def get_expenses(
         .filter(Expense.user_id == user.id)
     )
 
-    if category_name:
+    # TODO Fix this ugly if (All Categories)
+    if category_name and category_name != "All Categories":
         expenses_query = expenses_query.filter(Category.name == category_name)
 
     return expenses_query.order_by(order_by).all()
