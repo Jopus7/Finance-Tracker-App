@@ -1,5 +1,6 @@
 from datetime import date
 
+from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from app.categories.models import Category
@@ -7,12 +8,19 @@ from app.db.connection import engine
 from app.expenses.models import Expense
 from app.users.models import User
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 def seed_database():
     with Session(engine) as session:
         users = [
-            User(email="john.doe@gmail.com", first_name="John", last_name="Doe", password="password"),
-            User(email="jane.smith@gmail.com", first_name="Jane", last_name="Smith", password="password"),
+            User(email="john.doe@gmail.com", first_name="John", last_name="Doe", password=pwd_context.hash("password")),
+            User(
+                email="jane.smith@gmail.com",
+                first_name="Jane",
+                last_name="Smith",
+                password=pwd_context.hash("password"),
+            ),
         ]
 
         session.add_all(users)
