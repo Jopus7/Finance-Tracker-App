@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { AddExpenseDialog } from "./add-expense-dialog";
 
 
-
 type Expense = {
     id: number
     name: string
@@ -16,11 +15,20 @@ type Expense = {
     category_name: string
 }
 
+
+export type Category = {
+  id: number,
+  name: string
+}
+
 export const ExpensesList = () => {
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [expenses, setExpenses] = useState<Expense[]>([])
   const [sortBy, setSortBy] = useState<string>("date");
   const [order, setOrder] =  useState<"asc" | "desc">("desc");
+  const [selectedCategory, setSelectedCategory] = useState<string>(""); 
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const handleClickOpen = () => {
     setDialogOpen(true)
@@ -30,7 +38,6 @@ export const ExpensesList = () => {
     setDialogOpen(false)
   }
   
-    const [expenses, setExpenses] = useState<Expense[]>([])
 
     const handleSort = (column: string) => {
       const newOrder = order === "asc" ? "desc" : "asc"
@@ -44,7 +51,8 @@ export const ExpensesList = () => {
           const response = await axiosInstance.get<Expense[]>("/api/expenses/", {
             params: {
               sort_by: sortBy,
-              order: order
+              order: order,
+              category_name: selectedCategory || null
             }
           })
           setExpenses(response.data)
@@ -52,6 +60,18 @@ export const ExpensesList = () => {
           console.error('Fetching expenses failed', err)
       }
   }
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+        try {
+            const response = await axiosInstance.get('/api/categories');
+            setCategories(response.data);
+        } catch(err) {
+            console.error('Fetching categories failed', err)
+        }
+    };
+    fetchCategories();
+}, [])
 
     useEffect(() => {
         fetchExpenses();
@@ -107,7 +127,7 @@ export const ExpensesList = () => {
         <Box textAlign="center" margin={2}>
           <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Expense</Button>
        </Box>
-            <AddExpenseDialog open={dialogOpen} onClose={handleDialogClose} onExpenseAdd={fetchExpenses}/>
+            <AddExpenseDialog open={dialogOpen} onClose={handleDialogClose} onExpenseAdd={fetchExpenses} categories={categories} />
         </Container>
       );
     };
