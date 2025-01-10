@@ -26,3 +26,13 @@ jobs:
 
       - name: Lint
         run: docker compose -f docker-compose.yml run --rm backend task ci:lint
+
+      - name: Tests
+        run: docker compose -f docker-compose.yml run --rm backend task test
+
+      - name: Typing
+        run: docker compose -f docker-compose.yml run --rm backend task typing
+
+      - name: Cleanup
+        if: always()
+        run: docker compose -f docker-compose.yml down --volumes --remove-orphans
