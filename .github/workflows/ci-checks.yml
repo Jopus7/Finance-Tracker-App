@@ -14,6 +14,7 @@ jobs:
         run: docker compose -f docker-compose.yml build
 
   backend-checks:
+    name: Backend checks
     runs-on: ubuntu-latest
     needs: build
 
@@ -22,3 +23,6 @@ jobs:
 
       - name: Format
         run: docker compose -f docker-compose.yml run --rm backend task ci:format
+
+      - name: Lint
+        run: docker compose -f docker-compose.yml run --rm backend task ci:lint
