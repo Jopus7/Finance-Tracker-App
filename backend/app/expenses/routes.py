@@ -8,7 +8,7 @@ from app.auth.dependencies import authentication
 from app.db.connection import db_session
 from app.expenses.models import Expense
 from app.expenses.repository import create_expense, delete_expense, get_expense_by_id, get_expenses
-from app.expenses.schemas import ExpenseIn, ExpenseOut, ExpenseOutListItem
+from app.expenses.schemas import ExpenseIn, ExpenseOut
 from app.users.models import User
 
 expense_router = APIRouter()
@@ -21,15 +21,15 @@ async def expense_create(
     return create_expense(dbs, user, expense_in)
 
 
-@expense_router.get("/", response_model=list[ExpenseOutListItem])
+@expense_router.get("/", response_model=list[ExpenseOut])
 async def expense_list(
     sort_by: str = "date",
     order: str = "desc",
-    category_name: Optional[str] = None,
+    category_id: Optional[int] = None,
     dbs: Session = Depends(db_session),
     user: User = Depends(authentication),
 ) -> list[Expense]:
-    return get_expenses(dbs, user, sort_by, order, category_name)
+    return get_expenses(dbs, user, sort_by, order, category_id)
 
 
 @expense_router.get("/{expense_id}", response_model=ExpenseOut)

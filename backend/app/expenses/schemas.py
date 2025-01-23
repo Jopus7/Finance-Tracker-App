@@ -14,16 +14,6 @@ class ExpenseIn(BaseModel):
     category_id: Optional[int]
 
 
-class ExpenseOutListItem(BaseOrmModel):
-    id: int
-    name: str
-    user_id: int
-    description: str
-    amount: float
-    date: dt_date
-    category_name: str
-
-
 class ExpenseOut(BaseOrmModel):
     id: int
     name: str

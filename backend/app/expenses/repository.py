@@ -3,7 +3,6 @@ from typing import Any, Optional
 from sqlalchemy import asc, desc
 from sqlalchemy.orm import Session
 
-from app.categories.models import Category
 from app.expenses.models import Expense
 from app.expenses.schemas import ExpenseIn
 from app.users.models import User
@@ -18,28 +17,15 @@ def create_expense(dbs: Session, user: User, expense_in: ExpenseIn) -> Expense:
 
 
 def get_expenses(
-    dbs: Session, user: User, sort_by: str = "date", order: str = "desc", category_name: Optional[str] = None
+    dbs: Session, user: User, sort_by: str = "date", order: str = "desc", category_id: Optional[int] = None
 ) -> list[Any]:
     sort_column = getattr(Expense, sort_by)
     order_by = asc(sort_column) if order == "asc" else desc(sort_column)  # type: ignore
 
-    expenses_query = (
-        dbs.query(
-            Expense.id,
-            Expense.name,
-            Expense.user_id,
-            Expense.description,
-            Expense.amount,
-            Expense.date,
-            Category.name.label("category_name"),
-        )
-        .join(Expense.category)
-        .filter(Expense.user_id == user.id)
-    )
+    expenses_query = dbs.query(Expense).outerjoin(Expense.category).filter(Expense.user_id == user.id)
 
-    # TODO Fix this ugly if (All Categories)
-    if category_name and category_name != "All Categories":
-        expenses_query = expenses_query.filter(Category.name == category_name)
+    if category_id is not None:
+        expenses_query = expenses_query.filter(Expense.category_id == category_id)
 
     return expenses_query.order_by(order_by).all()
 

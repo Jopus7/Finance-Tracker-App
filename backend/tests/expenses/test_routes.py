@@ -85,7 +85,7 @@ def test_expenses_list(client, authenticated_user, expense_factory, category_fac
             "description": expense_1.description,
             "amount": 5.99,
             "date": "2024-10-10",
-            "category_name": "Food",
+            "category_id": category.id,
         },
         {
             "id": expense_2.id,
@@ -94,12 +94,12 @@ def test_expenses_list(client, authenticated_user, expense_factory, category_fac
             "description": expense_2.description,
             "amount": 4.99,
             "date": "2024-10-10",
-            "category_name": "Food",
+            "category_id": category.id,
         },
     ]
 
 
-def test_expenses_list_filter_by_category_name(client, authenticated_user, expense_factory, category_factory):
+def test_expenses_list_filter_by_category(client, authenticated_user, expense_factory, category_factory):
     food_category = category_factory(name="Food")
     bills_category = category_factory(name="Bills")
 
@@ -130,7 +130,7 @@ def test_expenses_list_filter_by_category_name(client, authenticated_user, expen
         category=bills_category,
     )
 
-    response = client.get("api/expenses", params={"category_name": "Bills"})
+    response = client.get("api/expenses", params={"category_id": bills_category.id})
 
     assert response.status_code == 200
 
@@ -142,7 +142,7 @@ def test_expenses_list_filter_by_category_name(client, authenticated_user, expen
             "description": "Subscription",
             "amount": 4.99,
             "date": "2024-10-10",
-            "category_name": "Bills",
+            "category_id": bills_category.id,
         },
         {
             "id": expense_3.id,
@@ -151,7 +151,7 @@ def test_expenses_list_filter_by_category_name(client, authenticated_user, expen
             "description": "Invoice",
             "amount": 28.99,
             "date": "2024-10-10",
-            "category_name": "Bills",
+            "category_id": bills_category.id,
         },
     ]
 
