@@ -2,6 +2,9 @@ name: CI checks
 
 on: push
 
+env:
+  PASSWORD: $ {{secrets.DATABASE_PASSWORD}}
+
 jobs:
   build:
     name: Setup
