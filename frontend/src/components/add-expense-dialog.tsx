@@ -5,6 +5,7 @@ import { DateField } from '@mui/x-date-pickers/DateField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from "dayjs";
+import { Category } from "./expenses-list";
 
 type ExpenseData = {
     name: string
@@ -14,35 +15,20 @@ type ExpenseData = {
     categoryId: number
 }
 
-type Category = {
-    id: number,
-    name: string
-}
+
 
 type AddExpenseDialogProps = {
     open: boolean;
     onClose: () => void;
     onExpenseAdd: () => void;
+    categories: Category[]
 }
 
 
 
-export const AddExpenseDialog = ({open, onClose, onExpenseAdd} : AddExpenseDialogProps) => {
+export const AddExpenseDialog = ({open, onClose, onExpenseAdd, categories} : AddExpenseDialogProps) => {
     const [expenseData, setExpenseData] = useState<ExpenseData>({name: '', description: '', amount: 0, date: dayjs(), categoryId: 1})
 
-    const [categories, setCategories] = useState<Category[]>([])
-
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await axiosInstance.get('/api/categories');
-                setCategories(response.data);
-            } catch(err) {
-                console.error('Fetching categories failed', err)
-            }
-        };
-        fetchCategories();
-    }, [])
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setExpenseData({

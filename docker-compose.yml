@@ -25,19 +25,19 @@ services:
       - ./backend:/app
     environment:
       - PYTHONUNBUFFERED=1
-      - DATABASE_HOST
-      - DATABASE_PORT
-      - DATABASE_NAME
-      - DATABASE_USER
-      - DATABASE_PASSWORD
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=finance_tracker
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=password
     command: pipenv run uvicorn app.api.routes:app --host 0.0.0.0 --port 8000 --reload
   postgres:
     image: postgres:16-alpine
     container_name: finance_tracker_db
     environment:
-      POSTGRES_DB: ${DATABASE_NAME}
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: finance_tracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
     volumes:
       - /var/lib/postgresql/data
     ports:

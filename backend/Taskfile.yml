@@ -12,10 +12,18 @@ tasks:
     desc: Run formatter
     cmds:
       - ruff format
+  ci:format:
+    desc: Check formatting
+    cmds:
+      - ruff format --check
   lint:
     desc: Run linter
     cmds:
       - ruff check --fix
+  ci:lint:
+    desc: Check lint
+    cmds:
+      - ruff check
   typing:
     desc: Run mypy for type hints check
     cmds:
@@ -27,7 +35,7 @@ tasks:
   test:
     desc: Run tests
     cmds:
-      - python -m pytest {{ if .CLI_ARGS }}{{ .CLI_ARGS }}{{ else }}tests/{{ end }} 
+      - python -m pytest {{ if .CLI_ARGS }}{{ .CLI_ARGS }}{{ else }}tests/{{ end }}
   seed:
     desc: Seed database with initial data
     cmds:

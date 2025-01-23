@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import axiosInstance from "../api";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box} from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box, TextField, MenuItem} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AddExpenseDialog } from "./add-expense-dialog";
-
+import { CategoryDropdown } from "./category-dropdown";
 
 
 type Expense = {
@@ -16,11 +16,20 @@ type Expense = {
     category_name: string
 }
 
+
+export type Category = {
+  id: number,
+  name: string
+}
+
 export const ExpensesList = () => {
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [expenses, setExpenses] = useState<Expense[]>([])
   const [sortBy, setSortBy] = useState<string>("date");
   const [order, setOrder] =  useState<"asc" | "desc">("desc");
+  const [selectedCategory, setSelectedCategory] = useState<string>("All Categories"); 
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const handleClickOpen = () => {
     setDialogOpen(true)
@@ -30,7 +39,6 @@ export const ExpensesList = () => {
     setDialogOpen(false)
   }
   
-    const [expenses, setExpenses] = useState<Expense[]>([])
 
     const handleSort = (column: string) => {
       const newOrder = order === "asc" ? "desc" : "asc"
@@ -44,7 +52,8 @@ export const ExpensesList = () => {
           const response = await axiosInstance.get<Expense[]>("/api/expenses/", {
             params: {
               sort_by: sortBy,
-              order: order
+              order: order,
+              category_name: selectedCategory || null
             }
           })
           setExpenses(response.data)
@@ -53,12 +62,33 @@ export const ExpensesList = () => {
       }
   }
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+        try {
+            const response = await axiosInstance.get('/api/categories');
+            setCategories(response.data);
+        } catch(err) {
+            console.error('Fetching categories failed', err)
+        }
+    };
+    fetchCategories();
+}, [])
+
     useEffect(() => {
         fetchExpenses();
-    }, [sortBy, order])
+    }, [sortBy, order, selectedCategory])
 
     return (
       <Container>
+      <Box sx={{marginTop: 2, marginBottom: 2 }}>
+          <CategoryDropdown 
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              categories={categories}
+              label="fiilter by category"
+              showAllCategories={true}
+          />
+      </Box>
         <TableContainer component={Paper} style={{ marginTop: "10px", width: "100%", alignItems: "center" }}>
           <Table>
             <TableHead>
@@ -107,7 +137,7 @@ export const ExpensesList = () => {
         <Box textAlign="center" margin={2}>
           <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Expense</Button>
        </Box>
-            <AddExpenseDialog open={dialogOpen} onClose={handleDialogClose} onExpenseAdd={fetchExpenses}/>
+            <AddExpenseDialog open={dialogOpen} onClose={handleDialogClose} onExpenseAdd={fetchExpenses} categories={categories} />
         </Container>
       );
     };
