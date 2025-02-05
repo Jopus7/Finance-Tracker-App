@@ -1,7 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Typography, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api';
+
+
+type Currency = {
+  symbol: string;
+  name: string;
+  code: string;
+}
+
+const CURRENCY_API_KEY = "fca_live_IvTleYhbbu5eetIBESBI6H1hVMsD4USiD9F7ypQG"
+const CURRENCY_API_URL = "https://api.freecurrencyapi.com/v1/"
+
 
 const RegisterPage = () => {
     const [firstName, setFirstName] = useState('');
@@ -10,6 +21,25 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [error, setError] = useState('');
+    const [currencies, setCurrencies] = useState([]);
+    const [defaultCurrency, setDefaultCurrency] = useState("USD")
+
+    useEffect(() => {
+      const fetchCurrencies = async () => {
+        try {
+          const response = await fetch(`${CURRENCY_API_URL}currencies?apikey=${CURRENCY_API_KEY}`);
+          if (!response.ok) {
+            throw new Error("Failed to load currencies")
+          }
+          const data = await response.json()
+          setCurrencies(data.data)
+        } catch (err) {
+          console.error("Error", err)
+        }
+      }
+
+      fetchCurrencies();
+    }, [])
   
     const handleRegister = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -49,6 +79,15 @@ const RegisterPage = () => {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
+          <TextField
+            select
+            label="Default Currency"
+            fullWidth
+            required
+            margin="normal"
+            value={defaultCurrency}
+
+          ></TextField>
           <TextField
             label="Email"
             type="email"
