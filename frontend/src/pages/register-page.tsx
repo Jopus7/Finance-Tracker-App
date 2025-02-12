@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Typography, Link } from '@mui/material';
+import { TextField, Button, Container, Typography, Link, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api';
-
+import Freecurrencyapi from '@everapi/freecurrencyapi-js';
 
 type Currency = {
   symbol: string;
@@ -12,6 +12,8 @@ type Currency = {
 
 const CURRENCY_API_KEY = "fca_live_IvTleYhbbu5eetIBESBI6H1hVMsD4USiD9F7ypQG"
 const CURRENCY_API_URL = "https://api.freecurrencyapi.com/v1/"
+const freecurrencyapi = new Freecurrencyapi(CURRENCY_API_KEY);
+
 
 
 const RegisterPage = () => {
@@ -21,22 +23,25 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [error, setError] = useState('');
-    const [currencies, setCurrencies] = useState([]);
+    const [currencies, setCurrencies] = useState<Currency[]>([]);
     const [defaultCurrency, setDefaultCurrency] = useState("USD")
 
+    
     useEffect(() => {
       const fetchCurrencies = async () => {
-        try {
-          const response = await fetch(`${CURRENCY_API_URL}currencies?apikey=${CURRENCY_API_KEY}`);
-          if (!response.ok) {
-            throw new Error("Failed to load currencies")
-          }
-          const data = await response.json()
-          setCurrencies(data.data)
-        } catch (err) {
-          console.error("Error", err)
+        // try {
+          const { data } = await freecurrencyapi.currencies()
+          
+          const convertedData = Object.entries(data).map(([code, details]: [string, any]) => ({
+            code,
+            symbol:details.symbol,
+            name: details.name
+          }))
+
+          setCurrencies(convertedData)
         }
-      }
+
+
 
       fetchCurrencies();
     }, [])
@@ -49,6 +54,7 @@ const RegisterPage = () => {
           last_name: lastName,
           email,
           password,
+          default_currency: defaultCurrency
         });
         navigate('/login');
       } catch (error) {
@@ -86,8 +92,14 @@ const RegisterPage = () => {
             required
             margin="normal"
             value={defaultCurrency}
-
-          ></TextField>
+            onChange={(e) => setDefaultCurrency(e.target.value)}
+          >
+            {currencies.map((currency) => (
+              <MenuItem key={currency.code} value={currency.code}>
+                {currency.name} {currency.symbol}
+              </MenuItem>
+            ))}
+          </TextField>
           <TextField
             label="Email"
             type="email"
