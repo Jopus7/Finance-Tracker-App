@@ -19,6 +19,7 @@ class User(BaseModel):
     email: Mapped[str] = mapped_column(String, unique=True)
     first_name: Mapped[str] = mapped_column(String)
     last_name: Mapped[str] = mapped_column(String)
+    default_currency: Mapped[str] = mapped_column(String, default="USD")
     password: Mapped[str] = mapped_column(String)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 

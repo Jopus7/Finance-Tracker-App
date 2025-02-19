@@ -13,7 +13,7 @@ type Expense = {
     description: string
     amount: number
     date: string
-    category_name: string
+    category_id: number
 }
 
 

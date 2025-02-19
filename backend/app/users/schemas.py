@@ -8,6 +8,7 @@ class UserIn(BaseModel):
     last_name: str
     email: str
     password: str
+    default_currency: str
 
 
 class UserOut(BaseOrmModel):
@@ -15,3 +16,4 @@ class UserOut(BaseOrmModel):
     email: str
     first_name: str
     last_name: str
+    default_currency: str
