@@ -29,18 +29,21 @@ const RegisterPage = () => {
     
     useEffect(() => {
       const fetchCurrencies = async () => {
-        // try {
+        try {
           const { data } = await freecurrencyapi.currencies()
           
           const convertedData = Object.entries(data).map(([code, details]: [string, any]) => ({
             code,
-            symbol:details.symbol,
+            symbol: details.symbol,
             name: details.name
           }))
 
           setCurrencies(convertedData)
+        } catch (error) {
+          console.error('Failed to fetch currencies:', error);
+          setError('Failed to load currencies. Please refresh the page.');
         }
-
+      }
 
 
       fetchCurrencies();
