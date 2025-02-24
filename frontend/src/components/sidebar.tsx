@@ -1,6 +1,7 @@
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Box } from '@mui/material';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Box, Divider } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import HistoryIcon from '@mui/icons-material/History';
+import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +14,7 @@ export const Sidebar = () => {
     setOpen(!open);
   };
 
-  const menuItems = [
+  const mainMenuItems = [
     {
       text: 'Dashboard',
       icon: <DashboardIcon />,
@@ -23,6 +24,14 @@ export const Sidebar = () => {
       text: 'Expense History',
       icon: <HistoryIcon />,
       path: '/expenses'
+    }
+  ];
+
+  const secondaryMenuItems = [
+    {
+      text: 'My Profile',
+      icon: <PersonIcon />,
+      path: '/my-profile'
     }
   ];
 
@@ -52,7 +61,21 @@ export const Sidebar = () => {
         }}
       >
         <List>
-          {menuItems.map((item) => (
+          {mainMenuItems.map((item) => (
+            <ListItem 
+              key={item.text}
+              onClick={() => navigate(item.path)}
+            >
+              <ListItemIcon>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {secondaryMenuItems.map((item) => (
             <ListItem 
               key={item.text}
               onClick={() => navigate(item.path)}

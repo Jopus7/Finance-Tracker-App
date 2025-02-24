@@ -5,6 +5,7 @@ import LoginPage from './pages/login-page';
 import RegisterPage from './pages/register-page';
 import HomePage from './pages/home-page';
 import DashboardPage from './pages/dashboard-page';
+import ProfilePage from './pages/profile-page';
 import { Layout } from './components/layout';
 
 const App = () => {
@@ -31,6 +32,16 @@ const App = () => {
               <PrivateRoute>
                 <Layout>
                   <HomePage />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/my-profile"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <ProfilePage />
                 </Layout>
               </PrivateRoute>
             }
