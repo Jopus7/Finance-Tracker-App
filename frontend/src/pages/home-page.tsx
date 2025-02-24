@@ -16,7 +16,7 @@ const HomePage = () => {
   return (
     <div>
     <NavBar/>
-    <Container maxWidth="sm" sx={{marginTop: 4}}>
+    <Container maxWidth="lg" sx={{marginTop: 4}}>
       <ExpensesList />
     </Container>
     </div>

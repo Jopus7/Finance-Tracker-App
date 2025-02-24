@@ -5,7 +5,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const DRAWER_WIDTH = 240;
 const COLLAPSED_DRAWER_WIDTH = 65;
@@ -13,10 +13,13 @@ const COLLAPSED_DRAWER_WIDTH = 65;
 export const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const isActive = (path: string) => location.pathname === path;
 
   const mainMenuItems = [
     {
@@ -38,6 +41,27 @@ export const Sidebar = () => {
       path: '/my-profile'
     }
   ];
+
+  const listItemStyles = (active: boolean) => ({
+    justifyContent: open ? 'initial' : 'center',
+    px: 2.5,
+    position: 'relative',
+    backgroundColor: active ? 'rgba(25, 118, 210, 0.08)' : 'transparent',
+    '&::before': active ? {
+      content: '""',
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: '4px',
+      backgroundColor: '#1976d2',
+      borderTopRightRadius: '4px',
+      borderBottomRightRadius: '4px',
+    } : {},
+    '&:hover': {
+      backgroundColor: active ? 'rgba(25, 118, 210, 0.12)' : 'rgba(0, 0, 0, 0.04)',
+    }
+  });
 
   return (
     <Drawer
@@ -77,46 +101,55 @@ export const Sidebar = () => {
           <ListItem 
             key={item.text}
             onClick={() => navigate(item.path)}
-            sx={{ 
-              justifyContent: open ? 'initial' : 'center',
-              px: 2.5,
-            }}
+            sx={listItemStyles(isActive(item.path))}
           >
             <ListItemIcon sx={{ 
               minWidth: 0, 
               mr: open ? 3 : 'auto', 
               justifyContent: 'center',
+              color: isActive(item.path) ? '#1976d2' : 'inherit'
             }}>
               {item.icon}
             </ListItemIcon>
             <ListItemText 
               primary={item.text} 
-              sx={{ opacity: open ? 1 : 0 }}
+              sx={{ 
+                opacity: open ? 1 : 0,
+                color: isActive(item.path) ? '#1976d2' : 'inherit'
+              }}
             />
           </ListItem>
         ))}
       </List>
-      <Divider />
+      <Divider 
+        sx={{ 
+          margin: '8px 8px',
+          borderColor: '#e0e0e0',
+          borderWidth: '1px',
+          width: 'auto'
+        }} 
+      />
       <List>
         {secondaryMenuItems.map((item) => (
           <ListItem 
             key={item.text}
             onClick={() => navigate(item.path)}
-            sx={{ 
-              justifyContent: open ? 'initial' : 'center',
-              px: 2.5,
-            }}
+            sx={listItemStyles(isActive(item.path))}
           >
             <ListItemIcon sx={{ 
               minWidth: 0, 
               mr: open ? 3 : 'auto', 
               justifyContent: 'center',
+              color: isActive(item.path) ? '#1976d2' : 'inherit'
             }}>
               {item.icon}
             </ListItemIcon>
             <ListItemText 
               primary={item.text} 
-              sx={{ opacity: open ? 1 : 0 }}
+              sx={{ 
+                opacity: open ? 1 : 0,
+                color: isActive(item.path) ? '#1976d2' : 'inherit'
+              }}
             />
           </ListItem>
         ))}

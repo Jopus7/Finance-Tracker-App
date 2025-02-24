@@ -1,8 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react"
 import axiosInstance from "../api";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box, TextField, MenuItem} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box} from "@mui/material";
 import { AddExpenseDialog } from "./add-expense-dialog";
 import { CategoryDropdown } from "./category-dropdown";
 
@@ -111,7 +109,7 @@ export const ExpensesList = () => {
                 </TableCell>
                 <TableCell>
                 <TableSortLabel
-                  active={sortBy == "amount"}
+                  active={sortBy === "amount"}
                   direction={order}
                   onClick={() => handleSort("amount")}
                 >
