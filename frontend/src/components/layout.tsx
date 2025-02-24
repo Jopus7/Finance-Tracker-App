@@ -17,7 +17,6 @@ export const Layout = ({ children }: LayoutProps) => {
           flexGrow: 1,
           p: 3,
           marginTop: '64px', // Height of AppBar
-          marginLeft: '240px', // Width of Sidebar
         }}
       >
         {children}

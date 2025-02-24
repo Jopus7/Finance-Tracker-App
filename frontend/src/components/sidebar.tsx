@@ -3,8 +3,12 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import HistoryIcon from '@mui/icons-material/History';
 import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+const DRAWER_WIDTH = 240;
+const COLLAPSED_DRAWER_WIDTH = 65;
 
 export const Sidebar = () => {
   const [open, setOpen] = useState(true);
@@ -36,58 +40,86 @@ export const Sidebar = () => {
   ];
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        onClick={toggleDrawer}
-        edge="start"
-        sx={{ marginRight: 2 }}
-      >
-        <MenuIcon />
-      </IconButton>
-      <Drawer
-        variant="persistent"
-        anchor="left"
-        open={open}
-        sx={{
-          width: 240,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: 240,
-            boxSizing: 'border-box',
-            marginTop: '64px', // Height of AppBar
-          },
-        }}
-      >
-        <List>
-          {mainMenuItems.map((item) => (
-            <ListItem 
-              key={item.text}
-              onClick={() => navigate(item.path)}
-            >
-              <ListItemIcon>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {secondaryMenuItems.map((item) => (
-            <ListItem 
-              key={item.text}
-              onClick={() => navigate(item.path)}
-            >
-              <ListItemIcon>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </Box>
+    <Drawer
+      variant="permanent"
+      anchor="left"
+      open={open}
+      sx={{
+        width: open ? DRAWER_WIDTH : COLLAPSED_DRAWER_WIDTH,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: open ? DRAWER_WIDTH : COLLAPSED_DRAWER_WIDTH,
+          boxSizing: 'border-box',
+          marginTop: '64px', // Height of AppBar
+          overflowX: 'hidden',
+          transition: theme => theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
+        },
+      }}
+    >
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: open ? 'flex-end' : 'center',
+        padding: '8px'
+      }}>
+        <IconButton onClick={toggleDrawer}>
+          {open ? <ChevronLeftIcon /> : <MenuIcon />}
+        </IconButton>
+      </Box>
+      <List>
+        {mainMenuItems.map((item) => (
+          <ListItem 
+            button 
+            key={item.text}
+            onClick={() => navigate(item.path)}
+            sx={{ 
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
+            }}
+          >
+            <ListItemIcon sx={{ 
+              minWidth: 0, 
+              mr: open ? 3 : 'auto', 
+              justifyContent: 'center',
+            }}>
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText 
+              primary={item.text} 
+              sx={{ opacity: open ? 1 : 0 }}
+            />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {secondaryMenuItems.map((item) => (
+          <ListItem 
+            button 
+            key={item.text}
+            onClick={() => navigate(item.path)}
+            sx={{ 
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
+            }}
+          >
+            <ListItemIcon sx={{ 
+              minWidth: 0, 
+              mr: open ? 3 : 'auto', 
+              justifyContent: 'center',
+            }}>
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText 
+              primary={item.text} 
+              sx={{ opacity: open ? 1 : 0 }}
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
   );
 }; 
