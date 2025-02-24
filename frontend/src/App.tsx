@@ -7,48 +7,52 @@ import HomePage from './pages/home-page';
 import DashboardPage from './pages/dashboard-page';
 import ProfilePage from './pages/profile-page';
 import { Layout } from './components/layout';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from './theme';
 
 const App = () => {
   return (
-    <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <DashboardPage />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/expenses"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <HomePage />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/my-profile"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <ProfilePage />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </AuthProvider>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <DashboardPage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/expenses"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <HomePage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/my-profile"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <ProfilePage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </AuthProvider>
+      </Router>
+    </ThemeProvider>
   );
 };
 

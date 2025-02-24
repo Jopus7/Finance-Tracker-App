@@ -52,6 +52,9 @@ export const Sidebar = () => {
           boxSizing: 'border-box',
           marginTop: '64px', // Height of AppBar
           overflowX: 'hidden',
+          backgroundColor: '#fff',
+          borderRight: '1px solid #e0e0e0',
+          borderTop: '1px solid #e0e0e0',
           transition: theme => theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -72,7 +75,6 @@ export const Sidebar = () => {
       <List>
         {mainMenuItems.map((item) => (
           <ListItem 
-            button 
             key={item.text}
             onClick={() => navigate(item.path)}
             sx={{ 
@@ -98,7 +100,6 @@ export const Sidebar = () => {
       <List>
         {secondaryMenuItems.map((item) => (
           <ListItem 
-            button 
             key={item.text}
             onClick={() => navigate(item.path)}
             sx={{ 
