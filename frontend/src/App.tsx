@@ -4,6 +4,8 @@ import { AuthProvider, AuthContext } from './context/auth-context';
 import LoginPage from './pages/login-page';
 import RegisterPage from './pages/register-page';
 import HomePage from './pages/home-page';
+import DashboardPage from './pages/dashboard-page';
+import { Layout } from './components/layout';
 
 const App = () => {
   return (
@@ -14,10 +16,22 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route
-            path="/home"
+            path="/dashboard"
             element={
               <PrivateRoute>
-                <HomePage />
+                <Layout>
+                  <DashboardPage />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/expenses"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <HomePage />
+                </Layout>
               </PrivateRoute>
             }
           />

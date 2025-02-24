@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const userResponse = await axiosInstance.get('/api/users/me/');
       setUser(userResponse.data);
 
-      navigate('/home');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
     }
