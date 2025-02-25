@@ -74,7 +74,7 @@ export const Sidebar = () => {
         '& .MuiDrawer-paper': {
           width: open ? DRAWER_WIDTH : COLLAPSED_DRAWER_WIDTH,
           boxSizing: 'border-box',
-          marginTop: '64px', // Height of AppBar
+          marginTop: '64px',
           overflowX: 'hidden',
           backgroundColor: '#fff',
           borderRight: '1px solid #e0e0e0',
