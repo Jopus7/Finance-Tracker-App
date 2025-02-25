@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import axiosInstance from "../api";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box} from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box, IconButton} from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { AddExpenseDialog } from "./add-expense-dialog";
 import { CategoryDropdown } from "./category-dropdown";
 
@@ -11,7 +12,7 @@ type Expense = {
     description: string
     amount: number
     date: string
-    category_id: number
+    category_name: string
 }
 
 
@@ -42,6 +43,19 @@ export const ExpensesList = () => {
       const newOrder = order === "asc" ? "desc" : "asc"
       setOrder(newOrder)
       setSortBy(column)
+
+    }
+
+
+    const handleDeleteExpense = async (expenseId: number) => {
+      if (window.confirm("Are you sure you want to delete this expense?")){
+        try{
+          await axiosInstance.delete(`/api/expenses/${expenseId}`)
+          fetchExpenses();
+        } catch (err) {
+          console.error("Deleting expense failed", err)
+        }
+      }
 
     }
 
@@ -127,6 +141,12 @@ export const ExpensesList = () => {
                   <TableCell>{expense.description}</TableCell>
                   <TableCell>{expense.category_name}</TableCell>
                   <TableCell>{expense.amount.toFixed(2)} zł</TableCell>
+                  <TableCell>
+                    <IconButton
+                    onClick={() => handleDeleteExpense(expense.id)}>
+                                          <DeleteIcon/>
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
