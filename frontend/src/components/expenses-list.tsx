@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import DeleteIcon from '@mui/icons-material/Delete';
 import { AddExpenseDialog } from "./add-expense-dialog";
 import { CategoryDropdown } from "./category-dropdown";
+import { ConfirmationDialog } from "./confirmation-dialog";
 
 
 type Expense = {
@@ -29,6 +30,8 @@ export const ExpensesList = () => {
   const [order, setOrder] =  useState<"asc" | "desc">("desc");
   const [selectedCategory, setSelectedCategory] = useState<string>("All Categories"); 
   const [categories, setCategories] = useState<Category[]>([]);
+  const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
   const handleClickOpen = () => {
     setDialogOpen(true)
@@ -46,17 +49,15 @@ export const ExpensesList = () => {
 
     }
 
-
-    const handleDeleteExpense = async (expenseId: number) => {
-      if (window.confirm("Are you sure you want to delete this expense?")){
+    const handleDeleteExpenseConfirm = async (expenseId: number) => {
         try{
           await axiosInstance.delete(`/api/expenses/${expenseId}`)
           fetchExpenses();
         } catch (err) {
           console.error("Deleting expense failed", err)
         }
-      }
-
+        setDeleteDialogOpen(false);
+        setExpenseToDelete(null);
     }
 
     const fetchExpenses = async () => {
@@ -142,10 +143,14 @@ export const ExpensesList = () => {
                   <TableCell>{expense.category_name}</TableCell>
                   <TableCell>{expense.amount.toFixed(2)} zł</TableCell>
                   <TableCell>
-                    <IconButton
-                    onClick={() => handleDeleteExpense(expense.id)}>
-                                          <DeleteIcon/>
-                    </IconButton>
+                  <IconButton
+                      onClick={() => {
+                        setDeleteDialogOpen(true);
+                        setExpenseToDelete(expense.id)
+                      }}
+                  >
+                      <DeleteIcon />
+                      </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -156,6 +161,17 @@ export const ExpensesList = () => {
           <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Expense</Button>
        </Box>
             <AddExpenseDialog open={dialogOpen} onClose={handleDialogClose} onExpenseAdd={fetchExpenses} categories={categories} />
+            <ConfirmationDialog
+                title="Delete Expense"
+                message="Are you sure you want to delete this expense?"
+                open={deleteDialogOpen}
+                onConfirm={() => expenseToDelete && handleDeleteExpenseConfirm(expenseToDelete)}
+                onCancel={() => {
+                  setDeleteDialogOpen(false);
+                  setExpenseToDelete(null);
+                }}
+
+            />
         </Container>
       );
     };
