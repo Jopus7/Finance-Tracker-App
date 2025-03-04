@@ -8,6 +8,7 @@ interface User {
   email: string;
   first_name: string;
   last_name: string;
+  default_currency: string
 }
 
 interface AuthContextType {
