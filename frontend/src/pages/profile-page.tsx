@@ -52,30 +52,35 @@ const ProfilePage = () => {
         <Button variant='contained'> Edit Profile</Button>
       {/* // )} */}
       </Grid>
-
-      <Grid item xs={12} md={4}>
-        <Typography variant="h4" gutterBottom>My Profile</Typography>
-
+      <Grid item xs={12} md={6} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <Typography variant='subtitle1'>First Name</Typography> 
-            <Typography variant='body1'>{firstName}</Typography> 
+          <Grid item xs={4}>
+            <Typography variant='subtitle1'>First Name</Typography>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography variant='subtitle1'>Last Name</Typography> 
-            <Typography variant='body1'>{lastName}</Typography> 
+          <Grid item xs={8}>
+            <Typography variant='body1'>{firstName}</Typography>
           </Grid>
-
-          <Typography variant='subtitle1'>Email</Typography> 
-          <Typography variant='body1'>{email}</Typography> 
-
-          <Typography variant='subtitle1'>Default Currency</Typography> 
-          <Typography variant='body1'>{defaultCurrency}</Typography> 
-
-        </Grid>
-      </Grid>
-
+          <Grid item xs={4}>
+             <Typography variant='subtitle1'>Last Name</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <Typography variant='body1'>{lastName}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant='subtitle1'>Email</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <Typography variant='body1'>{email}</Typography>
+          </Grid>
+           <Grid item xs={4}>
+            <Typography variant='subtitle1'>Default Currency</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <Typography variant='body1'>{defaultCurrency}</Typography>
+          </Grid>
     </Grid>
+   </Grid>
+   </Grid>
   </Paper>
   </Box>
 </Container>
