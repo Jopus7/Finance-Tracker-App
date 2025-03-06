@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import axiosInstance from "../api";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel, Button, Container, Box, IconButton} from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Button, Container, Box } from "@mui/material";
 import { AddExpenseDialog } from "./add-expense-dialog";
 import { CategoryDropdown } from "./category-dropdown";
 import { ConfirmationDialog } from "./confirmation-dialog";
+import ExpenseTable from "./expense-table";
 
 
 type Expense = {
@@ -40,15 +40,12 @@ export const ExpensesList = () => {
   const handleDialogClose = () => {
     setDialogOpen(false)
   }
-  
 
-    const handleSort = (column: string) => {
-      const newOrder = order === "asc" ? "desc" : "asc"
-      setOrder(newOrder)
-      setSortBy(column)
-
-    }
-
+  const handleSort = (column: string) => {
+    const isAsc = sortBy === column && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setSortBy(column);
+  };
     const handleDeleteExpenseConfirm = async (expenseId: number) => {
         try{
           await axiosInstance.delete(`/api/expenses/${expenseId}`)
@@ -75,17 +72,17 @@ export const ExpensesList = () => {
       }
   }
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-        try {
-            const response = await axiosInstance.get('/api/categories');
-            setCategories(response.data);
-        } catch(err) {
-            console.error('Fetching categories failed', err)
-        }
-    };
-    fetchCategories();
-}, [])
+    useEffect(() => {
+      const fetchCategories = async () => {
+          try {
+              const response = await axiosInstance.get('/api/categories');
+              setCategories(response.data);
+          } catch(err) {
+              console.error('Fetching categories failed', err)
+          }
+      };
+      fetchCategories();
+    }, [])
 
     useEffect(() => {
         fetchExpenses();
@@ -93,85 +90,49 @@ export const ExpensesList = () => {
 
     return (
       <Container>
-      <Box sx={{marginTop: 2, marginBottom: 2 }}>
-          <CategoryDropdown 
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              categories={categories}
-              label="fiilter by category"
-              showAllCategories={true}
-          />
-      </Box>
-        <TableContainer component={Paper} style={{ marginTop: "10px", width: "100%", alignItems: "center" }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                <TableSortLabel
-                  active={sortBy == "date"}
-                  direction={order}
-                  onClick={() => handleSort("date")}
-                >
-                    Date
-                </TableSortLabel>
-                </TableCell>
-                <TableCell>
-                    Name
-                </TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>
-                    Category
-                </TableCell>
-                <TableCell>
-                <TableSortLabel
-                  active={sortBy === "amount"}
-                  direction={order}
-                  onClick={() => handleSort("amount")}
-                >
-                    Amount
-                </TableSortLabel>
-                </TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {expenses.map((expense) => (
-                <TableRow key={expense.id}>
-                  <TableCell>{expense.date}</TableCell>
-                  <TableCell>{expense.name}</TableCell>
-                  <TableCell>{expense.description}</TableCell>
-                  <TableCell>{expense.category_name}</TableCell>
-                  <TableCell>{expense.amount.toFixed(2)} zł</TableCell>
-                  <TableCell>
-                  <IconButton
-                      onClick={() => {
-                        setDeleteDialogOpen(true);
-                        setExpenseToDelete(expense.id)
-                      }}
-                  >
-                      <DeleteIcon />
-                      </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Box textAlign="center" margin={2}>
-          <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Expense</Button>
-       </Box>
-            <AddExpenseDialog open={dialogOpen} onClose={handleDialogClose} onExpenseAdd={fetchExpenses} categories={categories} />
+            <Box sx={{ marginTop: 2, marginBottom: 2 }}>
+                <CategoryDropdown
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    categories={categories}
+                    label="Filter by category"
+                    showAllCategories={true}
+                />
+            </Box>
+            <Box textAlign="center" margin={2}>
+                <Button variant="contained" color="primary" onClick={() => setDialogOpen(true)}>
+                    Add Expense
+                </Button>
+            </Box>
+
+            <ExpenseTable
+                expenses={expenses}
+                onDelete={(id) => {
+                    setDeleteDialogOpen(true);
+                    setExpenseToDelete(id);
+                }}
+                sortBy={sortBy}
+                order={order}
+                onSort={handleSort}
+            />
+
+            <AddExpenseDialog
+                open={dialogOpen}
+                onClose={() => setDialogOpen(false)}
+                onExpenseAdd={fetchExpenses}
+                categories={categories}
+            />
+
             <ConfirmationDialog
                 title="Delete Expense"
                 message="Are you sure you want to delete this expense?"
                 open={deleteDialogOpen}
                 onConfirm={() => expenseToDelete && handleDeleteExpenseConfirm(expenseToDelete)}
                 onCancel={() => {
-                  setDeleteDialogOpen(false);
-                  setExpenseToDelete(null);
+                    setDeleteDialogOpen(false);
+                    setExpenseToDelete(null);
                 }}
-
             />
         </Container>
-      );
-    };
+    );
+};
