@@ -6,7 +6,7 @@ import { AddExpenseDialog } from '../components/add-expense-dialog';
 import { ExpensesList } from '../components/expenses-list';
 
 
-const HomePage = () => {
+const ExpensesPage = () => {
   const auth = useContext(AuthContext);
 
   if (!auth || !auth.user) {
@@ -23,4 +23,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ExpensesPage;

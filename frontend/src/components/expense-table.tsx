@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, TableHead, TableRow, TableCell, TableBody, Paper, TableSortLabel, IconButton, TableContainer } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-interface Expense {
+type Expense = {
     id: number;
     name: string;
     description: string;
@@ -11,7 +11,7 @@ interface Expense {
     category_name: string;
 }
 
-interface ExpenseTableProps {
+type ExpenseTableProps = {
     expenses: Expense[];
     onDelete: (id: number) => void;
     sortBy: string;
@@ -19,7 +19,8 @@ interface ExpenseTableProps {
     onSort: (column: string) => void;
 }
 
-const ExpenseTable: React.FC<ExpenseTableProps> = ({ expenses, onDelete, sortBy, order, onSort }) => {
+
+const ExpenseTable = ({ expenses, onDelete, sortBy, order, onSort }: ExpenseTableProps) => {
     return (
         <TableContainer component={Paper} style={{ marginTop: "10px", width: "100%" }}>
             <Table>
