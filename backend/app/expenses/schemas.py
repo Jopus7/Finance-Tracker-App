@@ -23,6 +23,7 @@ class ExpenseOutListItem(BaseOrmModel):
     amount: float
     date: dt_date
     category_name: str
+    currency: str
 
 
 class ExpenseOut(BaseOrmModel):
@@ -33,3 +34,4 @@ class ExpenseOut(BaseOrmModel):
     amount: float
     date: dt_date
     category_id: Optional[int]
+    currency: str

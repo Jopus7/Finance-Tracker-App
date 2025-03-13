@@ -13,6 +13,7 @@ type ExpenseData = {
     amount: number
     date: Dayjs | null
     categoryId: number
+    currency: string
 }
 
 
@@ -22,12 +23,13 @@ type AddExpenseDialogProps = {
     onClose: () => void;
     onExpenseAdd: () => void;
     categories: Category[]
+    currency_codes: string[]
 }
 
 
 
-export const AddExpenseDialog = ({open, onClose, onExpenseAdd, categories} : AddExpenseDialogProps) => {
-    const [expenseData, setExpenseData] = useState<ExpenseData>({name: '', description: '', amount: 0, date: dayjs(), categoryId: 1})
+export const AddExpenseDialog = ({open, onClose, onExpenseAdd, categories, currency_codes} : AddExpenseDialogProps) => {
+    const [expenseData, setExpenseData] = useState<ExpenseData>({name: '', description: '', amount: 0, date: dayjs(), categoryId: 1, currency: "USD"})
 
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +81,11 @@ export const AddExpenseDialog = ({open, onClose, onExpenseAdd, categories} : Add
                 <TextField autoFocus label="Name" name="name" type="text" variant="outlined" value={expenseData.name} onChange={handleInputChange} margin="normal" fullWidth required></TextField>
                 <TextField autoFocus label="Description" name="description" type="text" variant="outlined" value={expenseData.description} onChange={handleInputChange} margin="normal" fullWidth required></TextField>
                 <TextField autoFocus label="Amount" name="amount" type="number" variant="outlined" value={expenseData.amount} onChange={handleInputChange} margin="normal" fullWidth required></TextField>
+                <TextField autoFocus select name="currency" value={expenseData.currency} label="Currency" onChange={handleInputChange} fullWidth required>
+                    {currency_codes.map((currency) => (
+                    <MenuItem key={currency} value={currency}>{currency}</MenuItem>
+                    ))}
+                </TextField>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateField autoFocus label="Date" name="date" value={expenseData.date} onChange={handleDateChange} margin="normal" required></DateField>
                 </LocalizationProvider>

@@ -9,6 +9,7 @@ type Expense = {
     amount: number;
     date: string;
     category_name: string;
+    currency: string;
 }
 
 type ExpenseTableProps = {
@@ -57,7 +58,7 @@ const ExpenseTable = ({ expenses, onDelete, sortBy, order, onSort }: ExpenseTabl
                             <TableCell>{expense.name}</TableCell>
                             <TableCell>{expense.description}</TableCell>
                             <TableCell>{expense.category_name}</TableCell>
-                            <TableCell>{expense.amount.toFixed(2)} zł</TableCell>
+                            <TableCell>{expense.amount.toFixed(2)} {expense.currency}</TableCell>
                             <TableCell>
                                 <IconButton onClick={() => onDelete(expense.id)}>
                                     <DeleteIcon />

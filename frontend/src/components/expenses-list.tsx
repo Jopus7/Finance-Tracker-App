@@ -5,6 +5,8 @@ import { AddExpenseDialog } from "./add-expense-dialog";
 import { CategoryDropdown } from "./category-dropdown";
 import { ConfirmationDialog } from "./confirmation-dialog";
 import ExpenseTable from "./expense-table";
+import { freecurrencyapi } from "../pages/register-page";
+
 
 
 type Expense = {
@@ -14,8 +16,14 @@ type Expense = {
     amount: number
     date: string
     category_name: string
+    currency: string
 }
 
+type Currency = {
+  symbol: string;
+  name: string;
+  code: string;
+}
 
 export type Category = {
   id: number,
@@ -29,9 +37,11 @@ export const ExpensesList = () => {
   const [sortBy, setSortBy] = useState<string>("date");
   const [order, setOrder] =  useState<"asc" | "desc">("desc");
   const [selectedCategory, setSelectedCategory] = useState<string>("All Categories"); 
+  const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleClickOpen = () => {
     setDialogOpen(true)
@@ -81,12 +91,34 @@ export const ExpensesList = () => {
               console.error('Fetching categories failed', err)
           }
       };
+
+      const fetchCurrencies = async () => {
+        try {
+          setIsLoading(true)
+          const { data } = await freecurrencyapi.currencies()
+          
+          const convertedData = Object.entries(data).map(([code, details]: [string, any]) => ({
+            code,
+            symbol: details.symbol,
+            name: details.name
+          }))
+
+          setCurrencies(convertedData)
+        } catch (error) {
+          console.error('Failed to fetch currencies:', error);
+        }
+        finally {
+          setIsLoading(false)
+        }
+      }
       fetchCategories();
+      fetchCurrencies();
     }, [])
 
     useEffect(() => {
         fetchExpenses();
     }, [sortBy, order, selectedCategory])
+
 
     return (
       <Container>
@@ -115,14 +147,18 @@ export const ExpensesList = () => {
                 order={order}
                 onSort={handleSort}
             />
-
-            <AddExpenseDialog
-                open={dialogOpen}
-                onClose={() => setDialogOpen(false)}
-                onExpenseAdd={fetchExpenses}
-                categories={categories}
+          {!isLoading && (
+              <AddExpenseDialog
+              open={dialogOpen}
+              onClose={() => setDialogOpen(false)}
+              onExpenseAdd={fetchExpenses}
+              categories={categories}
+              currency_codes={currencies.map(currency => currency.code)}
             />
-
+          )
+          
+          }
+          
             <ConfirmationDialog
                 title="Delete Expense"
                 message="Are you sure you want to delete this expense?"
