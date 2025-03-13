@@ -11,6 +11,7 @@ class ExpenseIn(BaseModel):
     description: str
     amount: float
     date: dt_date
+    currency: str
     category_id: Optional[int]
 
 
