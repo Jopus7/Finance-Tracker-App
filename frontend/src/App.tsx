@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, AuthContext } from './context/auth-context';
 import LoginPage from './pages/login-page';
 import RegisterPage from './pages/register-page';
-import HomePage from './pages/home-page';
+import HomePage from './pages/expenses-page';
 import DashboardPage from './pages/dashboard-page';
 import ProfilePage from './pages/profile-page';
 import { Layout } from './components/layout';
