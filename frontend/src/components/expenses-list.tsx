@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import axiosInstance from "../api";
-import { Button, Container, Box } from "@mui/material";
+import { Button, Container, Box, CircularProgress } from "@mui/material";
 import { AddExpenseDialog } from "./add-expense-dialog";
 import { CategoryDropdown } from "./category-dropdown";
 import { ConfirmationDialog } from "./confirmation-dialog";
@@ -17,6 +17,7 @@ type Expense = {
     date: string
     category_name: string
     currency: string
+    currencySymbol?: string
 }
 
 type Currency = {
@@ -43,13 +44,6 @@ export const ExpensesList = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const handleClickOpen = () => {
-    setDialogOpen(true)
-  }
-
-  const handleDialogClose = () => {
-    setDialogOpen(false)
-  }
 
   const handleSort = (column: string) => {
     const isAsc = sortBy === column && order === "asc";
@@ -57,17 +51,17 @@ export const ExpensesList = () => {
     setSortBy(column);
   };
     const handleDeleteExpenseConfirm = async (expenseId: number) => {
-        try{
-          await axiosInstance.delete(`/api/expenses/${expenseId}`)
-          fetchExpenses();
+        try {
+            await axiosInstance.delete(`/api/expenses/${expenseId}`);
+            fetchExpenses();
         } catch (err) {
-          console.error("Deleting expense failed", err)
+            console.error("Deleting expense failed", err);
         }
         setDeleteDialogOpen(false);
         setExpenseToDelete(null);
-    }
+    };
 
-    const fetchExpenses = async () => {
+    const fetchExpenses = useCallback(async () => {
       try {
           const response = await axiosInstance.get<Expense[]>("/api/expenses/", {
             params: {
@@ -80,45 +74,65 @@ export const ExpensesList = () => {
       } catch(err) {
           console.error('Fetching expenses failed', err)
       }
-  }
+  }, [sortBy, order, selectedCategory]);
 
     useEffect(() => {
       const fetchCategories = async () => {
-          try {
-              const response = await axiosInstance.get('/api/categories');
-              setCategories(response.data);
-          } catch(err) {
-              console.error('Fetching categories failed', err)
-          }
+        try {
+          const response = await axiosInstance.get('/api/categories');
+          setCategories(response.data);
+        } catch(err) {
+          console.error('Fetching categories failed', err);
+        }
       };
 
       const fetchCurrencies = async () => {
         try {
-          setIsLoading(true)
-          const { data } = await freecurrencyapi.currencies()
+          const { data } = await freecurrencyapi.currencies();
           
           const convertedData = Object.entries(data).map(([code, details]: [string, any]) => ({
             code,
             symbol: details.symbol,
             name: details.name
-          }))
+          }));
 
-          setCurrencies(convertedData)
+          setCurrencies(convertedData);
         } catch (error) {
           console.error('Failed to fetch currencies:', error);
         }
-        finally {
-          setIsLoading(false)
-        }
       }
-      fetchCategories();
-      fetchCurrencies();
-    }, [])
 
-    useEffect(() => {
-        fetchExpenses();
-    }, [sortBy, order, selectedCategory])
+      const loadInitialData = async () => {
+        setIsLoading(true);
+        try {
+          await Promise.all([
+            fetchCategories(),
+            fetchCurrencies()
+          ]);
+          
+          const response = await axiosInstance.get<Expense[]>("/api/expenses/", {
+            params: {
+              sort_by: sortBy,
+              order: order,
+              category_name: selectedCategory || null
+            }
+          });
+          setExpenses(response.data);
+          
+        } catch (err) {
+          console.error('Failed to load initial data', err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      loadInitialData();
+    }, [sortBy, order, selectedCategory]);
 
+    const getCurrencySymbol = (currencyCode: string): string => {
+      const currency = currencies.find(c => c.code === currencyCode);
+      return currency ? currency.symbol : currencyCode;
+    };
 
     return (
       <Container>
@@ -137,8 +151,16 @@ export const ExpensesList = () => {
                 </Button>
             </Box>
 
-            <ExpenseTable
-                expenses={expenses}
+            {isLoading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <ExpenseTable
+                expenses={expenses.map(expense => ({
+                  ...expense,
+                  currencySymbol: getCurrencySymbol(expense.currency)
+                }))}
                 onDelete={(id) => {
                     setDeleteDialogOpen(true);
                     setExpenseToDelete(id);
@@ -146,7 +168,8 @@ export const ExpensesList = () => {
                 sortBy={sortBy}
                 order={order}
                 onSort={handleSort}
-            />
+              />
+            )}
           {!isLoading && (
               <AddExpenseDialog
               open={dialogOpen}
