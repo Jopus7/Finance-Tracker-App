@@ -5,7 +5,7 @@ import { DateField } from '@mui/x-date-pickers/DateField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from "dayjs";
-import { Category } from "./expenses-list";
+import { Category } from "../types";
 
 type ExpenseData = {
     name: string
