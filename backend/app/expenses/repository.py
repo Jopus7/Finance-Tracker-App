@@ -31,6 +31,7 @@ def get_expenses(
             Expense.description,
             Expense.amount,
             Expense.date,
+            Expense.currency,
             Category.name.label("category_name"),
         )
         .join(Expense.category)

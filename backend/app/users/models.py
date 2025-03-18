@@ -5,7 +5,7 @@ from sqlalchemy import BigInteger, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
-from app.db.models import BaseModel
+from app.db.connection import BaseModel
 
 if TYPE_CHECKING:
     from app.categories.models import Category

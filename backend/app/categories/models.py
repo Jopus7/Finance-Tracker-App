@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING
 from sqlalchemy import BigInteger, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.models import BaseModel
+from app.db.connection import BaseModel
+
 
 if TYPE_CHECKING:
     from app.expenses.models import Expense

@@ -29,26 +29,26 @@ def seed_database():
         categories = {cat.name: cat for cat in session.query(Category).all()}
 
         expenses_template = [
-            ("Weekly Groceries", "Walmart shopping", 156.78, date(2024, 3, 1), categories["Groceries"]),
-            ("Monthly Groceries", "Costco bulk buy", 345.67, date(2024, 3, 15), categories["Groceries"]),
-            ("Electricity Bill", "February power bill", 89.99, date(2024, 2, 28), categories["Bills"]),
-            ("Internet Bill", "Monthly internet", 59.99, date(2024, 3, 1), categories["Bills"]),
-            ("Flight Tickets", "Summer vacation", 578.90, date(2024, 3, 10), categories["Travel"]),
-            ("Hotel Booking", "Beach resort", 899.99, date(2024, 3, 10), categories["Travel"]),
-            ("Cinema", "Movie night", 35.00, date(2024, 3, 5), categories["Entertainment"]),
-            ("Concert Tickets", "Rock concert", 150.00, date(2024, 3, 20), categories["Entertainment"]),
-            ("Doctor Visit", "Annual checkup", 125.00, date(2024, 3, 2), categories["Healthcare"]),
-            ("Pharmacy", "Prescription medicines", 45.67, date(2024, 3, 3), categories["Healthcare"]),
-            ("Online Course", "Python programming", 199.99, date(2024, 3, 1), categories["Education"]),
-            ("Books", "Technical books", 89.99, date(2024, 3, 15), categories["Education"]),
-            ("New Shoes", "Running shoes", 129.99, date(2024, 3, 8), categories["Shopping"]),
-            ("Clothes", "Winter jacket", 199.99, date(2024, 3, 12), categories["Shopping"]),
+            ("Weekly Groceries", "Walmart shopping", 156.78, date(2024, 3, 1), categories["Groceries"], "USD"),
+            ("Monthly Groceries", "Costco bulk buy", 345.67, date(2024, 3, 15), categories["Groceries"], "USD"),
+            ("Electricity Bill", "February power bill", 89.99, date(2024, 2, 28), categories["Bills"], "USD"),
+            ("Internet Bill", "Monthly internet", 59.99, date(2024, 3, 1), categories["Bills"], "USD"),
+            ("Flight Tickets", "Summer vacation", 578.90, date(2024, 3, 10), categories["Travel"], "USD"),
+            ("Hotel Booking", "Beach resort", 899.99, date(2024, 3, 10), categories["Travel"], "USD"),
+            ("Cinema", "Movie night", 35.00, date(2024, 3, 5), categories["Entertainment"], "USD"),
+            ("Concert Tickets", "Rock concert", 150.00, date(2024, 3, 20), categories["Entertainment"], "USD"),
+            ("Doctor Visit", "Annual checkup", 125.00, date(2024, 3, 2), categories["Healthcare"], "USD"),
+            ("Pharmacy", "Prescription medicines", 45.67, date(2024, 3, 3), categories["Healthcare"], "USD"),
+            ("Online Course", "Python programming", 199.99, date(2024, 3, 1), categories["Education"], "USD"),
+            ("Books", "Technical books", 89.99, date(2024, 3, 15), categories["Education"], "USD"),
+            ("New Shoes", "Running shoes", 129.99, date(2024, 3, 8), categories["Shopping"], "USD"),
+            ("Clothes", "Winter jacket", 199.99, date(2024, 3, 12), categories["Shopping"], "USD"),
         ]
 
         for user in users:
-            for name, description, amount, date_, category in expenses_template:
+            for name, description, amount, date_, category, currency in expenses_template:
                 expense = Expense(
-                    name=name, description=description, amount=amount, date=date_, user=user, category=category
+                    name=name, description=description, amount=amount, date=date_, user=user, category=category, currency=currency
                 )
                 session.add(expense)
 
