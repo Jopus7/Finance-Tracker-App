@@ -48,7 +48,13 @@ def seed_database():
         for user in users:
             for name, description, amount, date_, category, currency in expenses_template:
                 expense = Expense(
-                    name=name, description=description, amount=amount, date=date_, user=user, category=category, currency=currency
+                    name=name,
+                    description=description,
+                    amount=amount,
+                    date=date_,
+                    user=user,
+                    category=category,
+                    currency=currency,
                 )
                 session.add(expense)
 

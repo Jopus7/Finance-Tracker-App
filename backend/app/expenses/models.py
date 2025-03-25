@@ -6,7 +6,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.connection import BaseModel
 
-
 if TYPE_CHECKING:
     from app.categories.models import Category
     from app.users.models import User

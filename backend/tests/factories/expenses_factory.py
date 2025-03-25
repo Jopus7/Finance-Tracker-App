@@ -9,7 +9,7 @@ from app.expenses.models import Expense
 def expense_factory(session, user_factory):
     counter = Counter()
 
-    def factory(name, description, amount, date, user=None, category=None):
+    def factory(name, description, amount, date, currency="USD", user=None, category=None):
         category_id = category.id if category else None
         expense = Expense(
             name=name,
@@ -17,6 +17,7 @@ def expense_factory(session, user_factory):
             user=user or user_factory(),
             amount=amount,
             date=date,
+            currency=currency,
             category_id=category_id,
         )
         session.add(expense)
