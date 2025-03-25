@@ -3,11 +3,12 @@ import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import { useExpenses } from '../../hooks/use-expenses';
 import { useState, useEffect} from 'react';
 import * as R from 'remeda';
+import { Expense } from '../../types';
 
 type CategoryData = {
     id: number
     category: string;
-    amount: string
+    value: number
 }
 
 export const Dashboard = () => {
@@ -19,12 +20,12 @@ export const Dashboard = () => {
         if (expenses.length > 0) {
             const expenseTotalsByCategory = R.pipe(
                 expenses,
-                R.groupBy(expense => expense.category_name),
+                R.groupBy((expense: Expense) => expense.category_name),
                 Object.entries,
-                R.map(([category, expenses], idx) => ({
+                R.map(([category, expenses]: [string, Expense[]], idx) => ({
                     id: idx + 1,
                     category,
-                    amount: (R.sum(expenses.map(expense => expense.amount)) as number).toFixed(2)
+                    value: R.round(Number(R.sum(expenses.map(expense => expense.amount))), 2)
                 }
             ))
             )
@@ -44,7 +45,7 @@ export const Dashboard = () => {
                         data: categoryData.map(data => {
                             return {
                                 id: data.id,
-                                value: data.amount,
+                                value: data.value,
                                 label: data.category
                             }
                         }),
