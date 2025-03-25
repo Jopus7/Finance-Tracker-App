@@ -1,4 +1,3 @@
-import React from 'react';
 import { Table, TableHead, TableRow, TableCell, TableBody, Paper, TableSortLabel, IconButton, TableContainer } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -9,6 +8,7 @@ type Expense = {
     amount: number;
     date: string;
     category_name: string;
+    currencySymbol: string;
 }
 
 type ExpenseTableProps = {
@@ -57,7 +57,7 @@ const ExpenseTable = ({ expenses, onDelete, sortBy, order, onSort }: ExpenseTabl
                             <TableCell>{expense.name}</TableCell>
                             <TableCell>{expense.description}</TableCell>
                             <TableCell>{expense.category_name}</TableCell>
-                            <TableCell>{expense.amount.toFixed(2)} zł</TableCell>
+                            <TableCell>{expense.amount.toFixed(2)} {expense.currencySymbol }</TableCell>
                             <TableCell>
                                 <IconButton onClick={() => onDelete(expense.id)}>
                                     <DeleteIcon />

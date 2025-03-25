@@ -15,6 +15,7 @@ def test_create_expense(client, authenticated_user, session, category_factory):
             "description": "Tesco",
             "amount": 80.0,
             "date": "2024-10-08",
+            "currency": "USD",
             "category_id": category.id,
         },
     )
@@ -31,6 +32,7 @@ def test_create_expense(client, authenticated_user, session, category_factory):
         "description": "Tesco",
         "amount": 80.0,
         "date": "2024-10-08",
+        "currency": "USD",
         "category_id": category.id,
     }
 
@@ -44,6 +46,7 @@ def test_create_expense_when_user_unauthenticated(client, category_factory):
             "description": "Tesco",
             "amount": 80.0,
             "date": "2024-10-08",
+            "currency": "USD",
             "category_id": category.id,
         },
     )
@@ -85,6 +88,7 @@ def test_expenses_list(client, authenticated_user, expense_factory, category_fac
             "description": expense_1.description,
             "amount": 5.99,
             "date": "2024-10-10",
+            "currency": "USD",
             "category_name": "Food",
         },
         {
@@ -94,6 +98,7 @@ def test_expenses_list(client, authenticated_user, expense_factory, category_fac
             "description": expense_2.description,
             "amount": 4.99,
             "date": "2024-10-10",
+            "currency": "USD",
             "category_name": "Food",
         },
     ]
@@ -142,6 +147,7 @@ def test_expenses_list_filter_by_category_name(client, authenticated_user, expen
             "description": "Subscription",
             "amount": 4.99,
             "date": "2024-10-10",
+            "currency": "USD",
             "category_name": "Bills",
         },
         {
@@ -151,6 +157,7 @@ def test_expenses_list_filter_by_category_name(client, authenticated_user, expen
             "description": "Invoice",
             "amount": 28.99,
             "date": "2024-10-10",
+            "currency": "USD",
             "category_name": "Bills",
         },
     ]
@@ -178,6 +185,7 @@ def test_expense_detail(client, authenticated_user, expense_factory, category_fa
         "description": "tire change",
         "amount": 200.59,
         "date": "2024-10-10",
+        "currency": "USD",
         "category_id": category.id,
     }
 
@@ -219,6 +227,7 @@ def test_expense_delete(client, session, authenticated_user, expense_factory):
         "user_id": authenticated_user.id,
         "amount": 100.00,
         "date": "2024-10-22",
+        "currency": "USD",
         "category_id": None,
     }
     assert session.query(Expense).count() == 0
