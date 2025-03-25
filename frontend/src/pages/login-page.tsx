@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
-import { TextField, Button, Container, Typography, Link } from '@mui/material';
-import { AuthContext } from '../context/auth-context';
+import React, { useState, useContext } from "react";
+import { TextField, Button, Container, Typography, Link } from "@mui/material";
+import { AuthContext } from "../context/auth-context";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const auth = useContext(AuthContext);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -43,7 +43,7 @@ const LoginPage = () => {
         </Button>
       </form>
       <Typography variant="body2" align="center" marginTop={2}>
-        Don't have an account?{' '}
+        Don't have an account?{" "}
         <Link href="/register" underline="hover">
           Register
         </Link>

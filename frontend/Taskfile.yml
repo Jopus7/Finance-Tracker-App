@@ -1,0 +1,11 @@
+version: "3"
+
+tasks:
+  default:
+  desc: "Run all dev tools"
+  cmds:
+    - task: format
+  format:
+    desc: Reformat code
+    cmds:
+      - yarn format

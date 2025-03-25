@@ -1,6 +1,6 @@
-import { Box } from '@mui/material';
-import { NavBar } from './navbar';
-import { Sidebar } from './sidebar';
+import { Box } from "@mui/material";
+import { NavBar } from "./navbar";
+import { Sidebar } from "./sidebar";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -8,7 +8,7 @@ type LayoutProps = {
 
 export const Layout = ({ children }: LayoutProps) => {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <NavBar />
       <Sidebar />
       <Box
@@ -16,11 +16,11 @@ export const Layout = ({ children }: LayoutProps) => {
         sx={{
           flexGrow: 1,
           p: 3,
-          marginTop: '64px', // Height of AppBar
+          marginTop: "64px", // Height of AppBar
         }}
       >
         {children}
       </Box>
     </Box>
   );
-}; 
+};

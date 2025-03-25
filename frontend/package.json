@@ -22,6 +22,7 @@
     "axios": "^1.7.3",
     "dayjs": "^1.11.13",
     "jwt-decode": "^4.0.0",
+    "prettier": "^3.5.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
@@ -33,6 +34,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "format": "prettier --log-level warn --write \"**/*.{js,jsx,ts,tsx,css,less,scss,sass,html,json,md,mdx,yml,yaml}\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
