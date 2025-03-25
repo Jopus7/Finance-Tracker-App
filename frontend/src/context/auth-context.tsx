@@ -1,14 +1,13 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../api';
-
+import React, { createContext, useState, useEffect, ReactNode } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api";
 
 interface User {
   email: string;
   first_name: string;
   last_name: string;
-  default_currency: string
+  default_currency: string;
 }
 
 interface AuthContextType {
@@ -27,40 +26,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axiosInstance.post('/api/auth/token', { email, password });
+      const response = await axiosInstance.post("/api/auth/token", {
+        email,
+        password,
+      });
       const { access_token } = response.data;
-      localStorage.setItem('token', access_token);
+      localStorage.setItem("token", access_token);
 
       // Fetch user details
-      const userResponse = await axiosInstance.get('/api/users/me/');
+      const userResponse = await axiosInstance.get("/api/users/me/");
       setUser(userResponse.data);
 
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setUser(null);
-    navigate('/login');
+    navigate("/login");
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
         if (decodedToken.exp * 1000 > Date.now()) {
           // Fetch user details
-          axiosInstance.get('/api/users/me/')
-            .then(response => {
+          axiosInstance
+            .get("/api/users/me/")
+            .then((response) => {
               setUser(response.data);
               setLoading(false);
             })
-            .catch(error => {
-              console.error('Failed to fetch user:', error);
+            .catch((error) => {
+              console.error("Failed to fetch user:", error);
               logout();
               setLoading(false);
             });
@@ -70,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setLoading(false);
         }
       } catch (error) {
-        console.error('Invalid token:', error);
+        console.error("Invalid token:", error);
         logout();
         setLoading(false);
       }
@@ -84,7 +87,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, isAuthenticated: !!user }}
+    >
       {children}
     </AuthContext.Provider>
   );

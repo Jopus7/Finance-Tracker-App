@@ -1,14 +1,19 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, AuthContext } from './context/auth-context';
-import LoginPage from './pages/login-page';
-import RegisterPage from './pages/register-page';
-import HomePage from './pages/expenses-page';
-import DashboardPage from './pages/dashboard-page';
-import ProfilePage from './pages/profile-page';
-import { Layout } from './components/layout';
-import { ThemeProvider } from '@mui/material/styles';
-import { theme } from './theme';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider, AuthContext } from "./context/auth-context";
+import LoginPage from "./pages/login-page";
+import RegisterPage from "./pages/register-page";
+import HomePage from "./pages/expenses-page";
+import DashboardPage from "./pages/dashboard-page";
+import ProfilePage from "./pages/profile-page";
+import { Layout } from "./components/layout";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./theme";
 
 const App = () => {
   return (

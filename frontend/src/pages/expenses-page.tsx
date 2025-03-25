@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
-import { Box, Button, Container, Typography } from '@mui/material';
-import { AuthContext } from '../context/auth-context';
-import { NavBar } from '../components/navbar';
-import { AddExpenseDialog } from '../components/add-expense-dialog';
-import { ExpensesList } from '../components/expenses-list';
-
+import React, { useContext } from "react";
+import { Box, Button, Container, Typography } from "@mui/material";
+import { AuthContext } from "../context/auth-context";
+import { NavBar } from "../components/navbar";
+import { AddExpenseDialog } from "../components/add-expense-dialog";
+import { ExpensesList } from "../components/expenses-list";
 
 const ExpensesPage = () => {
   const auth = useContext(AuthContext);
@@ -15,10 +14,10 @@ const ExpensesPage = () => {
 
   return (
     <div>
-    <NavBar/>
-    <Container maxWidth="lg" sx={{marginTop: 4}}>
-      <ExpensesList />
-    </Container>
+      <NavBar />
+      <Container maxWidth="lg" sx={{ marginTop: 4 }}>
+        <ExpensesList />
+      </Container>
     </div>
   );
 };
