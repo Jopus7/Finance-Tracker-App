@@ -21,6 +21,7 @@
     "@types/react-dom": "^18.0.0",
     "axios": "^1.7.3",
     "dayjs": "^1.11.13",
+    "eslint": "^9.23.0",
     "jwt-decode": "^4.0.0",
     "prettier": "^3.5.3",
     "react": "^18.3.1",
@@ -37,7 +38,9 @@
     "format": "prettier --log-level warn --write \"**/*.{js,jsx,ts,tsx,css,less,scss,sass,html,json,md,mdx,yml,yaml}\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "yarn lint:js",
+    "lint:fix": "yarn app:lint --fix"
   },
   "eslintConfig": {
     "extends": [
