@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -9,16 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/api";
-import Freecurrencyapi from "@everapi/freecurrencyapi-js";
-
-type Currency = {
-  symbol: string;
-  name: string;
-  code: string;
-};
-
-const CURRENCY_API_KEY = "fca_live_IvTleYhbbu5eetIBESBI6H1hVMsD4USiD9F7ypQG";
-export const freecurrencyapi = new Freecurrencyapi(CURRENCY_API_KEY);
+import { useCurrencies } from "../hooks/use-currencies";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -27,31 +18,9 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [defaultCurrency, setDefaultCurrency] = useState("USD");
 
-  useEffect(() => {
-    const fetchCurrencies = async () => {
-      try {
-        const { data } = await freecurrencyapi.currencies();
-
-        const convertedData = Object.entries(data).map(
-          ([code, details]: [string, any]) => ({
-            code,
-            symbol: details.symbol,
-            name: details.name,
-          }),
-        );
-
-        setCurrencies(convertedData);
-      } catch (error) {
-        console.error("Failed to fetch currencies:", error);
-        setError("Failed to load currencies. Please refresh the page.");
-      }
-    };
-
-    fetchCurrencies();
-  }, []);
+  const { currencies } = useCurrencies();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();

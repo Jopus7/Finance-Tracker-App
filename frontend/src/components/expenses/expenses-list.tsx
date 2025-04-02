@@ -21,7 +21,6 @@ export const ExpensesList = () => {
   const [order, setOrder] = useState<"asc" | "desc">("desc");
   const [selectedCategory, setSelectedCategory] =
     useState<string>("All Categories");
-    
   const [categories, setCategories] = useState<Category[]>([]);
   const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -30,11 +29,11 @@ export const ExpensesList = () => {
   const {
     expenses,
     isLoading: expensesLoading,
-    error,
+    error: expensesError,
     fetchExpenses,
   } = useExpenses(sortBy, order, selectedCategory);
 
-  const {currencies, isCurrencyLoading, currencyError } = useCurrencies()
+  const { currencies, isCurrencyLoading, currencyError } = useCurrencies();
 
   const handleSort = (column: string) => {
     const isAsc = sortBy === column && order === "asc";
@@ -63,8 +62,6 @@ export const ExpensesList = () => {
       }
     };
 
-    
-
     const loadInitialData = async () => {
       setInitialLoading(true);
       try {
@@ -84,7 +81,8 @@ export const ExpensesList = () => {
     return currency ? currency.symbol : currencyCode;
   };
 
-  const isLoading = initialLoading || expensesLoading;
+  const isLoading = initialLoading || expensesLoading || isCurrencyLoading;
+  const error = expensesError || currencyError;
 
   return (
     <Container>

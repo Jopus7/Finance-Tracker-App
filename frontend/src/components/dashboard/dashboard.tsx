@@ -1,4 +1,3 @@
-import { Container, Typography, Box, Paper, Grid, Button } from "@mui/material";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { useExpenses } from "../../hooks/use-expenses";
 import { useState, useEffect } from "react";

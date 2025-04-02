@@ -7,7 +7,6 @@ import {
   Button,
 } from "@mui/material";
 
-
 type ConfirmationDialogProps = {
   title: string;
   message: string;
