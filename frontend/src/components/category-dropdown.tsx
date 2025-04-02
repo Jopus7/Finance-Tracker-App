@@ -1,5 +1,5 @@
 import { MenuItem, TextField } from "@mui/material";
-import { Category } from "./expenses-list";
+import { Category } from "../types";
 
 type CategoryDropdownProps = {
   value: string;

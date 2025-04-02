@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
 RUN apk add --no-cache --update --quiet curl
-RUN curl -sL https://taskfile.dev/install.sh | sh
+RUN curl -sL https://taskfile.dev/install.sh | sh -s -- -b /usr/local/bin
 
 WORKDIR /app
 

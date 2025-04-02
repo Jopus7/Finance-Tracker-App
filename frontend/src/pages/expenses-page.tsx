@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { AuthContext } from "../context/auth-context";
 import { NavBar } from "../components/navbar";
-import { AddExpenseDialog } from "../components/add-expense-dialog";
-import { ExpensesList } from "../components/expenses-list";
+import { AddExpenseDialog } from "../components/expenses/add-expense-dialog";
+import { ExpensesList } from "../components/expenses/expenses-list";
 
 const ExpensesPage = () => {
   const auth = useContext(AuthContext);
