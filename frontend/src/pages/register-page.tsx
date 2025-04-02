@@ -18,7 +18,6 @@ type Currency = {
 };
 
 const CURRENCY_API_KEY = "fca_live_IvTleYhbbu5eetIBESBI6H1hVMsD4USiD9F7ypQG";
-const CURRENCY_API_URL = "https://api.freecurrencyapi.com/v1/";
 export const freecurrencyapi = new Freecurrencyapi(CURRENCY_API_KEY);
 
 const RegisterPage = () => {

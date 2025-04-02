@@ -6,7 +6,7 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import axiosInstance from "../api/api";
+
 
 type ConfirmationDialogProps = {
   title: string;

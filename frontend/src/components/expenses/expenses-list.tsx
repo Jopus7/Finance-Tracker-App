@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "../.api";
+import axiosInstance from "../../api/api";
 import {
   Button,
   Container,
@@ -13,7 +13,7 @@ import { ConfirmationDialog } from "../confirmation-dialog";
 import ExpenseTable from "./expense-table";
 import { useExpenses } from "../../hooks/use-expenses";
 import { useCurrencies } from "../../hooks/use-currencies";
-import { Expense, Currency, Category } from "../../types";
+import { Expense, Category } from "../../types";
 
 export const ExpensesList = () => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
