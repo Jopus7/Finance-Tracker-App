@@ -8,7 +8,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../api";
+import axiosInstance from "../api/api";
 import Freecurrencyapi from "@everapi/freecurrencyapi-js";
 
 type Currency = {

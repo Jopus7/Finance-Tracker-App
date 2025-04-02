@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "../../api";
+import axiosInstance from "../.api";
 import {
   Button,
   Container,
@@ -11,8 +11,8 @@ import { AddExpenseDialog } from "./add-expense-dialog";
 import { CategoryDropdown } from "../category-dropdown";
 import { ConfirmationDialog } from "../confirmation-dialog";
 import ExpenseTable from "./expense-table";
-import { freecurrencyapi } from "../../pages/register-page";
 import { useExpenses } from "../../hooks/use-expenses";
+import { useCurrencies } from "../../hooks/use-currencies";
 import { Expense, Currency, Category } from "../../types";
 
 export const ExpensesList = () => {
@@ -21,7 +21,7 @@ export const ExpensesList = () => {
   const [order, setOrder] = useState<"asc" | "desc">("desc");
   const [selectedCategory, setSelectedCategory] =
     useState<string>("All Categories");
-  const [currencies, setCurrencies] = useState<Currency[]>([]);
+    
   const [categories, setCategories] = useState<Category[]>([]);
   const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -33,6 +33,8 @@ export const ExpensesList = () => {
     error,
     fetchExpenses,
   } = useExpenses(sortBy, order, selectedCategory);
+
+  const {currencies, isCurrencyLoading, currencyError } = useCurrencies()
 
   const handleSort = (column: string) => {
     const isAsc = sortBy === column && order === "asc";
@@ -61,28 +63,12 @@ export const ExpensesList = () => {
       }
     };
 
-    const fetchCurrencies = async () => {
-      try {
-        const { data } = await freecurrencyapi.currencies();
-
-        const convertedData = Object.entries(data).map(
-          ([code, details]: [string, any]) => ({
-            code,
-            symbol: details.symbol,
-            name: details.name,
-          }),
-        );
-
-        setCurrencies(convertedData);
-      } catch (error) {
-        console.error("Failed to fetch currencies:", error);
-      }
-    };
+    
 
     const loadInitialData = async () => {
       setInitialLoading(true);
       try {
-        await Promise.all([fetchCategories(), fetchCurrencies()]);
+        await Promise.all([fetchCategories()]);
       } catch (err) {
         console.error("Failed to load initial data", err);
       } finally {

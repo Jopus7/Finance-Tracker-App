@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import axiosInstance from "../api";
+import axiosInstance from "../api/api";
 
 type Expense = {
   id: number;
