@@ -6,6 +6,7 @@ from app.db.connection import db_session
 from app.users.models import User
 from app.users.repository import create_user, update_user_default_currency
 from app.users.schemas import UserIn, UserOut, UpdateDefaultCurrency
+from app.currencies.client import get_default_currencies
 
 user_router = APIRouter()
 
@@ -26,7 +27,10 @@ async def current_user(current_user: User = Depends(authentication)) -> User:
 @user_router.patch("/default-currency", response_model=UserOut)
 def update_default_currency(
     currency_update: UpdateDefaultCurrency,
-    current_user: User = Depends(authentication),
+    # current_user: User = Depends(authentication),
     dbs: Session = Depends(db_session)
 ):
-    return update_user_default_currency(dbs, current_user, currency_update.currency_update)
+    
+    print(get_default_currencies())
+    
+    # return update_user_default_currency(dbs, current_user, currency_update.currency_update)
