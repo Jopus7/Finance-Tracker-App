@@ -15,3 +15,10 @@ def create_user(dbs: Session, user_in: UserIn) -> User:
     dbs.add(user)
     dbs.commit()
     return user
+
+
+def update_user_default_currency(dbs: Session, user: User, currency_update: str) -> User:
+    user.default_currency = currency_update
+    dbs.commit()
+    dbs.refresh(user)
+    return user

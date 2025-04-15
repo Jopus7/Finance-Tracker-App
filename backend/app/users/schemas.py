@@ -17,3 +17,7 @@ class UserOut(BaseOrmModel):
     first_name: str
     last_name: str
     default_currency: str
+
+
+class UpdateDefaultCurrency(BaseModel):
+    currency_update: str

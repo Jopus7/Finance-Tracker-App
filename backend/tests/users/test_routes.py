@@ -26,3 +26,22 @@ def test_register_user(client, session):
         "email": "johnsmith@gmail.com",
         "default_currency": "USD",
     }
+
+
+
+def test_update_default_currency(client, session, authenticated_user):
+
+    
+    assert authenticated_user.default_currency == "USD"
+    
+    response = client.patch(
+        "api/users/default-currency",
+        json={
+            "currency_update": "EUR",
+        }
+    )
+    assert response.status_code == 200
+    assert authenticated_user.default_currency == "EUR"
+    
+    
+    
