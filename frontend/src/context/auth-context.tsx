@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../api";
+import axiosInstance from "../api/api";
 
 interface User {
   email: string;
