@@ -26,3 +26,18 @@ def test_register_user(client, session):
         "email": "johnsmith@gmail.com",
         "default_currency": "USD",
     }
+    
+    
+def test_edit_user(client, session, authenticated_user):
+    
+    breakpoint()
+    
+    response = client.put("api/users/me", json={
+            "first_name": "Jan",
+            "last_name": "Smith",
+            "email": "jansmith@gmail.com",
+            "password": "password",
+            "default_currency": "USD",
+    })
+    
+

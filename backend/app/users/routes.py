@@ -21,3 +21,8 @@ async def register_user(user_in: UserIn, dbs: Session = Depends(db_session)) -> 
 @user_router.get("/me", response_model=UserOut)
 async def current_user(current_user: User = Depends(authentication)) -> User:
     return current_user
+
+
+@user_router.put("/me", response_model=UserOut)
+async def update_user(user_in: UserIn, current_user: User = Depends(authentication), dbs: Session = Depends(db_session)) -> User:
+    return update_user(user_in, current_user, dbs)
