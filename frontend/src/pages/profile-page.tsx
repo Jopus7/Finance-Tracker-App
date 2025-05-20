@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { AuthContext } from "../context/auth-context";
 import React, { useContext, useState, useEffect } from "react";
+import { EditProfileDialog } from "../components/user-profile/edit-profile-dialog";
 
 // type Currency = {
 //   symbol: string;
@@ -18,7 +19,7 @@ import React, { useContext, useState, useEffect } from "react";
 
 const ProfilePage = () => {
   const auth = useContext(AuthContext);
-  const [editMode, setEditMode] = useState<boolean>(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -26,6 +27,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (auth?.user) {
+      
       setFirstName(auth.user.first_name);
       setLastName(auth.user.last_name);
       setEmail(auth.user.email);
@@ -63,10 +65,13 @@ const ProfilePage = () => {
               >
                 {getInitials()}
               </Avatar>
-
-              {/* {!editMode ? ( */}
-              <Button variant="contained"> Edit Profile</Button>
-              {/* // )} */}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setDialogOpen(true)}
+            >
+            Edit profile
+            </Button>
             </Grid>
             <Grid
               item
@@ -108,6 +113,7 @@ const ProfilePage = () => {
           </Grid>
         </Paper>
       </Box>
+      <EditProfileDialog open={dialogOpen} onClose={() => setDialogOpen(false)}/>
     </Container>
   );
 };
