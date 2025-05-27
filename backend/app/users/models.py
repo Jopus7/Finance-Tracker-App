@@ -10,6 +10,7 @@ from app.db.connection import BaseModel
 if TYPE_CHECKING:
     from app.categories.models import Category
     from app.expenses.models import Expense
+    from app.saving_targets.models import SavingTargets
 
 
 class User(BaseModel):
@@ -25,3 +26,4 @@ class User(BaseModel):
 
     expenses: Mapped[list["Expense"]] = relationship(back_populates="user")
     categories: Mapped[list["Category"]] = relationship(back_populates="user", cascade="all, delete")
+    saving_targets: Mapped[list["SavingTargets"]] = relationship(back_populates="user", cascade="all, delete")
