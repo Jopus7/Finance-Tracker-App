@@ -5,7 +5,7 @@ from app.saving_targets.models import SavingTarget
 def test_create_saving_target(client, authenticated_user, session):
     
     response = client.post(
-        "api/saving-targets",
+        "api/saving-targets/",
         json={
             "name": "Car",
             "target_amount": 20000.0
