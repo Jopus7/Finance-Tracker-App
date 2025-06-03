@@ -13,8 +13,13 @@ saving_target_router = APIRouter()
 
 @saving_target_router.post("", response_model=SavingTargetOut)
 async def create_saving_target(
-    saving_target_in: SavingTargetIn, dbs: Session = Depends(db_session)
+    saving_target_in: SavingTargetIn, dbs: Session = Depends(db_session), user: User = Depends(authentication)
     ) -> SavingTarget:
-    # return create_saving_target(dbs, user, saving_target_in)
-    # breakpoint()
-    pass
+   saving_target_data = saving_target_in.model_dump()
+   saving_target = SavingTarget(**saving_target_data, user=user)
+   dbs.add(saving_target)
+   dbs.commit()
+   return saving_target
+    
+    
+    # return saving_target_create(dbs, user, saving_target_in)

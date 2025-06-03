@@ -14,7 +14,7 @@ api_router.include_router(user_router, prefix="/users")
 api_router.include_router(auth_router, prefix="/auth")
 api_router.include_router(expense_router, prefix="/expenses")
 api_router.include_router(category_router, prefix="/categories")
-api_router.include_router(saving_target_router, prefix="/saving-target")
+api_router.include_router(saving_target_router, prefix="/saving-targets")
 
 app.include_router(api_router, prefix="/api")
 
