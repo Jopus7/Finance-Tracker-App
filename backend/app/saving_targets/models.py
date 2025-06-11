@@ -2,11 +2,10 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import BigInteger, ForeignKey, String, Float
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app.db.connection import BaseModel
 
 if TYPE_CHECKING:
-    from app.user.models import User
-
-from app.db.connection import BaseModel
+    from app.users.models import User
 
 
 class SavingTarget(BaseModel):
@@ -18,5 +17,5 @@ class SavingTarget(BaseModel):
     current_amount: Mapped[float] = mapped_column(Float)
     user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"), index=True)
  
-    user: Mapped["User"] = relationship(back_populates="saving_targets")
+    user: Mapped["User"] = relationship(back_populates="saving_targets", uselist=False)
     
