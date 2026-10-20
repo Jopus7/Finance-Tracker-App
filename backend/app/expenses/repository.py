@@ -52,4 +52,3 @@ def get_expense_by_id(dbs: Session, expense_id: int) -> Optional[Expense]:
 def delete_expense(dbs: Session, expense: Expense) -> None:
     dbs.delete(expense)
     dbs.commit()
-

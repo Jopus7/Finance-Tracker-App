@@ -6,6 +6,7 @@ class SavingTargetIn(BaseModel):
     target_amount: float
     current_amount: float | None = 0
 
+
 class SavingTargetOut(BaseModel):
     id: int
     name: str

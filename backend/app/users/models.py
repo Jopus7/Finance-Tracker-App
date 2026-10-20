@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from app.expenses.models import Expense
     from app.saving_targets.models import SavingTarget
 
+
 class User(BaseModel):
     __tablename__ = "users"
 

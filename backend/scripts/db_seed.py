@@ -1,9 +1,9 @@
 from datetime import date
-import app.db.models
 
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
+import app.db.models  # noqa: F401
 from app.categories.models import Category
 from app.db.connection import engine
 from app.expenses.models import Expense
