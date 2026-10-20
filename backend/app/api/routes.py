@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.auth.routes import auth_router
 from app.categories.routes import category_router
 from app.expenses.routes import expense_router
+from app.saving_targets.routes import saving_target_router
 from app.users.routes import user_router
 
 app = FastAPI()
@@ -13,6 +14,7 @@ api_router.include_router(user_router, prefix="/users")
 api_router.include_router(auth_router, prefix="/auth")
 api_router.include_router(expense_router, prefix="/expenses")
 api_router.include_router(category_router, prefix="/categories")
+api_router.include_router(saving_target_router, prefix="/saving-targets")
 
 app.include_router(api_router, prefix="/api")
 
