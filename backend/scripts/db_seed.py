@@ -1,4 +1,5 @@
 from datetime import date
+import app.db.models
 
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
