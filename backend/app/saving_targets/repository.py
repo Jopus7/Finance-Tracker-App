@@ -1,5 +1,8 @@
+from typing import Any
+
 from sqlalchemy import asc, desc
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.elements import UnaryExpression
 
 from app.saving_targets.models import SavingTarget
 from app.saving_targets.schemas import SavingTargetIn
@@ -19,15 +22,7 @@ def get_saving_targets(
     user: User,
     sort_by: str = "name",
     order: str = "asc",
-) -> list:
+) -> list[SavingTarget]:
     sort_column = getattr(SavingTarget, sort_by)
-    order_by = asc(sort_column) if order == "asc" else desc(sort_column)
-    saving_targets_query = dbs.query(
-        SavingTarget.id,
-        SavingTarget.name,
-        SavingTarget.target_amount,
-        SavingTarget.current_amount,
-        SavingTarget.user_id,
-    ).filter(SavingTarget.user_id == user.id)
-
-    return saving_targets_query.order_by(order_by).all()
+    order_by: UnaryExpression[Any] = asc(sort_column) if order == "asc" else desc(sort_column)
+    return dbs.query(SavingTarget).filter(SavingTarget.user_id == user.id).order_by(order_by).all()
